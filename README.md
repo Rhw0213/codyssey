@@ -1,34 +1,50 @@
-# 오디세이 학습
+# Codyssey 학습 미션 — 재현 가능한 개발 환경 구축
 
-## 미션 개요 요약
+---
 
-### 🎯 핵심 목표
-"내 컴퓨터에서만 돌아가는 문제"를 없애고, 팀원 누구나 동일하게 실행·배포·디버깅할 수 있는 재현 가능한 개발 환경을 직접 구축하는 것
+## 1. 미션 개요
 
-### 🛠️ 다루는 3가지 핵심 도구
-리눅스 CLI (터미널)	작업 디렉토리·권한 관리
-Docker (컨테이너)	격리된 실행 환경 구성
-Git / GitHub		버전 관리 및 협업
-### 📋 실습 흐름
-터미널로 작업 디렉토리와 권한 정리
-Docker 설치 및 점검 → 컨테이너 실행/관리
-웹 서버를 Dockerfile로 컨테이너화
-포트 매핑으로 접속 확인
-바인드 마운트 / 볼륨으로 "변경 반영"과 "데이터 영속성" 검증
+### 1.1 핵심 목표
 
-### 💡 학습 포인트
-단순 따라치기가 ❌ → 실행 결과(로그/접속/데이터 유지)로 흐름 확인 ✅
-구조적 원칙 이해:
-이미지와 컨테이너의 분리
-격리된 실행 환경
-포트·스토리지 연결 방식
-"왜 이런 설계가 필요한지" 설명 가능한 형태로 정리
+**"내 컴퓨터에서만 돌아가는 문제"를 없애는 것.**
+팀원 누구나 동일하게 실행·배포·디버깅할 수 있는 **재현 가능한 개발 환경**을 직접 손으로 구축한다.
 
-한 줄 요약: 터미널·Docker·Git을 직접 손으로 세팅하며, **"여러 번 실행해도 똑같이 재현되는 환경"**을 만드는 사고방식을 체득하는 미션이에요! 💪
+### 1.2 다루는 도구
 
-## 터미널 조작 로그 기록
+| 도구 | 역할 |
+|---|---|
+| 리눅스 CLI (터미널) | 작업 디렉토리·권한 관리 |
+| Docker (컨테이너) | 격리된 실행 환경 구성 |
+| Git / GitHub | 버전 관리 및 협업 |
 
-```bash
+### 1.3 실습 흐름
+
+1. 터미널로 작업 디렉토리와 권한 정리
+2. Docker 설치 및 점검 → 컨테이너 실행·관리
+3. 웹 서버를 Dockerfile로 컨테이너화
+4. 포트 매핑으로 접속 확인
+5. 바인드 마운트 / 볼륨으로 "변경 반영"과 "데이터 영속성" 검증
+
+### 1.4 학습 포인트
+
+- 단순 따라치기 ❌ → **실행 결과(로그 / 접속 / 데이터 유지)로 흐름 확인** ✅
+- 구조적 원칙 이해
+  - 이미지와 컨테이너의 분리
+  - 격리된 실행 환경
+  - 포트 · 스토리지 연결 방식
+- "왜 이런 설계가 필요한지"를 설명 가능한 형태로 정리
+
+> **한 줄 요약:** 터미널 · Docker · Git을 직접 세팅하며 *여러 번 실행해도 똑같이 재현되는 환경*을 만드는 사고방식을 체득하는 미션.
+
+---
+
+## 2. 리눅스 CLI 실습
+
+### 2.1 디렉토리 · 파일 조작
+
+#### 현재 위치 및 목록 확인
+
+```console
 rhw02133670@c4r1s8 codyssey % pwd
 /Users/rhw02133670/codyssey
 
@@ -39,7 +55,14 @@ drwxr-x---+ 23 rhw02133670  rhw02133670   736 Jul 28 11:13 ..
 -rw-r--r--@  1 rhw02133670  rhw02133670  6148 Jul 28 11:10 .DS_Store
 drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 10:57 .git
 -rw-r--r--   1 rhw02133670  rhw02133670  1260 Jul 28 10:41 README.md
+```
 
+- `pwd` : 현재 작업 디렉토리의 절대 경로 출력
+- `ls -al` : 숨김 파일(`.git`, `.DS_Store`)까지 포함한 상세 목록 출력
+
+#### 생성 → 이름 변경 → 복사 → 삭제
+
+```console
 rhw02133670@c4r1s8 codyssey % mkdir test
 rhw02133670@c4r1s8 codyssey % cd test
 
@@ -57,38 +80,72 @@ rhw02133670@c4r1s8 codyssey % ls
 README.md	test
 
 rhw02133670@c4r1s8 codyssey % rm -r test
-
 ```
 
-## 리눅스 파일 권한 변경 실습
+| 명령어 | 동작 | 확인 결과 |
+|---|---|---|
+| `mkdir test` | 디렉토리 생성 | `ls` 결과에 `test` 등장 |
+| `touch hello.txt` | 빈 파일 생성 | `cat` 출력이 비어 있음 (내용 없음) |
+| `mv` | 이름 변경 / 이동 | `hello.txt` → `hi.txt` → `hi_backup.txt` |
+| `cp` | 복사 | 백업본에서 `hi.txt` 복원 |
+| `rm` / `rm -r` | 파일 / 디렉토리 삭제 | 삭제 후 목록에서 사라짐 |
 
-```bash
+---
+
+### 2.2 파일 권한 관리 (chmod)
+
+#### ① 파일 생성 및 초기 상태 확인
+
+```console
 rhw02133670@c4r1s8 codyssey % touch test.txt
 rhw02133670@c4r1s8 codyssey % ls -l test.txt 
 -rw-r--r--  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
+```
+
+초기 권한 **`-rw-r--r--`** 분석
+
+| 대상 | 권한 | 의미 |
+|---|---|---|
+| 소유자 | `rw-` | 읽기 · 쓰기 가능 |
+| 그룹 | `r--` | 읽기만 가능 |
+| 기타 사용자 | `r--` | 읽기만 가능 |
+
+→ 파일을 생성하면 시스템 기본 설정(`umask`)에 따라 **소유자에게는 편집 권한, 타인에게는 읽기 권한만** 부여된 상태로 만들어진다.
+
+#### ② 권한 변경 실행
+
+```console
 rhw02133670@c4r1s8 codyssey % chmod 700 test.txt 
 rhw02133670@c4r1s8 codyssey % ls -l test.txt 
 -rwx------  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
+```
 
+숫자 모드 `700`의 의미
+
+| 자리 | 값 | 계산 | 결과 |
+|---|---|---|---|
+| 소유자 | `7` | 4(읽기) + 2(쓰기) + 1(실행) | 모든 권한 |
+| 그룹 | `0` | — | 권한 없음 |
+| 기타 | `0` | — | 권한 없음 |
+
+**변경 결과 분석**
+
+- 소유자: `rw-` → `rwx` — 이제 이 파일을 **실행**까지 할 수 있게 되었다.
+- 그룹 · 기타: 기존 읽기(`r--`) 권한이 모두 제거되어, **소유자 외에는 내용을 보거나 수정할 수 없는** 보안이 강화된 상태가 되었다.
+
+#### ③ 디렉토리 권한과 재귀 변경 (-R)
+
+```console
 rhw02133670@c4r1s8 codyssey % mkdir myFolder
 rhw02133670@c4r1s8 codyssey % ls -ld myFolder 
 drwxr-xr-x  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
+
 rhw02133670@c4r1s8 codyssey % chmod 700 myFolder 
-rhw02133670@c4r1s8 codyssey % ls -ld
-drwxr-xr-x  7 rhw02133670  rhw02133670  224 Jul 28 13:07 .
-rhw02133670@c4r1s8 codyssey % ls
-README.md	myFolder	test.txt
-rhw02133670@c4r1s8 codyssey % ls -al
-total 24
-drwxr-xr-x   7 rhw02133670  rhw02133670   224 Jul 28 13:07 .
-drwxr-x---+ 23 rhw02133670  rhw02133670   736 Jul 28 13:05 ..
--rw-r--r--@  1 rhw02133670  rhw02133670  6148 Jul 28 12:56 .DS_Store
-drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git
--rw-r--r--   1 rhw02133670  rhw02133670  3664 Jul 28 13:05 README.md
-drwx------   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
--rwx------   1 rhw02133670  rhw02133670     0 Jul 28 11:39 test.txt
 rhw02133670@c4r1s8 codyssey % ls -ld myFolder 
 drwx------  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
+```
+
+```console
 rhw02133670@c4r1s8 codyssey % chmod -R 755 myFolder 
 rhw02133670@c4r1s8 codyssey % ls -al
 total 24
@@ -99,107 +156,19 @@ drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git
 -rw-r--r--   1 rhw02133670  rhw02133670  3664 Jul 28 13:05 README.md
 drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 -rwx------   1 rhw02133670  rhw02133670     0 Jul 28 11:39 test.txt
-rhw02133670@c4r1s8 codyssey % 
 ```
 
-파일 생성 및 초기 상태 확인
-명령어: touch test.txt / ls -l test.txt
-초기 권한: -rw-r--r--
-상태 분석:
-소유자 (rhw02133670): rw- (읽기 및 쓰기 가능)
-그룹 (rhw02133670): r-- (읽기만 가능)
-기타 사용자 (Others): r-- (읽기만 가능)
-설명: 파일을 생성하면 시스템의 기본 설정(umask)에 따라 소유자에게는 편집 권한이, 타인에게는 읽기 권한만 부여된 상태로 생성됩니다.
-
-권한 변경 실행
-명령어: chmod 700 test.txt
-숫자 모드(700)의 의미:
-7 (소유자): 4(읽기) + 2(쓰기) + 1(실행) = 모든 권한 부여
-0 (그룹): 권한 없음
-0 (기타): 권한 없음
-
-변경 후 상태 확인 및 비교
-명령어: ls -l test.txt
-변경 권한: -rwx------
-결과 분석:
-
-소유자: 기존 rw-에서 rwx로 변경되어 이제 이 파일을 실행할 수도 있게 되었습니다.
-그룹 및 기타 사용자: 기존의 읽기(r--) 권한이 모두 제거되어, 소유자 외에는 이 파일의 내용을 보거나 수정할 수 없는 보안이 강화된 상태가 되었습니다.
-
-chmod -R 755 myFolder
-하위 폴더까지 전부 권환 변경
-
-
-## Docker 기본 운영 명령 수행
-
-### 1. 이미지 검색 (docker search)
-```bash
-rhw02133670@c4r1s8 codyssey % docker search ubuntu
-NAME                DESCRIPTION                                     STARS     OFFICIAL
-ubuntu              Ubuntu is a Debian-based Linux operating sys…   17862     [OK]
-ubuntu/squid        Squid is a caching proxy for the Web. Long-t…   129       
-ubuntu/nginx        Nginx, a high-performance reverse proxy & we…   141       
-... (생략)
-```
-> Docker Hub에서 `ubuntu` 관련 이미지를 검색합니다.  
-> `OFFICIAL [OK]` 표시는 공식 이미지를 의미하며, `STARS`는 인기도를 나타냅니다.
+- `ls -ld` : 디렉토리 **자체**의 정보를 확인 (내부 목록이 아니라)
+- `chmod -R 755` : **하위 폴더·파일까지 전부** 재귀적으로 권한 변경
+  - `drwx------` → `drwxr-xr-x` 로 되돌아온 것을 최종 목록에서 확인
 
 ---
 
-### 2. 이미지 다운로드 (docker pull)
-```bash
-rhw02133670@c4r1s8 docker_test % docker pull ubuntu
-Using default tag: latest
-latest: Pulling from library/ubuntu
-ed819469700f: Pull complete 
-a3679419df18: Pull complete 
-Digest: sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
-Status: Downloaded newer image for ubuntu:latest
-docker.io/library/ubuntu:latest
-```
-> 태그를 생략하면 자동으로 `latest` 버전을 받습니다.  
-> 이미지는 여러 **레이어(layer)** 로 나뉘어 다운로드됩니다.
+## 3. Docker 기초
 
----
+### 3.1 설치 검증 — hello-world
 
-### 3. 컨테이너 실행 (docker run -it)
-```bash
-rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash 
-root@a2911da37e52:/# ls
-bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-root@a2911da37e52:/# exit
-exit
-```
-> `-i`(interactive) + `-t`(tty) 옵션으로 **컨테이너 내부 셸에 접속**합니다.  
-> 프롬프트가 `root@컨테이너ID`로 바뀌며, 격리된 우분투 환경에 진입합니다.  
-> `exit`로 컨테이너를 빠져나옵니다.
-
----
-
-### 4. 이미지 목록 확인 (docker images)
-```bash
-rhw02133670@c4r1s8 codyssey % docker images
-REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
-ubuntu       latest    de7345b16e94   2 weeks ago   100MB
-```
-> 로컬에 다운로드된 이미지 목록을 보여줍니다.  
-> `IMAGE ID`, `SIZE` 등 이미지 메타정보를 확인할 수 있습니다.
-
----
-
-### 5. 실행 중인 컨테이너 확인 (docker ps)
-```bash
-rhw02133670@c4r1s8 codyssey % docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-```
-> **현재 실행 중인** 컨테이너만 보여줍니다.  
-> `exit`로 컨테이너를 종료했기 때문에 목록이 비어 있습니다.  
-> 💡 종료된 컨테이너까지 보려면 `docker ps -a`를 사용합니다.
-
-## 컨테이너 실행 실습
-
-### 1. hello-world 실행 (설치 검증)
-```bash
+```console
 rhw02133670@c4r1s8 codyssey % docker run hello-world
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
@@ -209,54 +178,126 @@ Status: Downloaded newer image for hello-world:latest
 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
-
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
-    (amd64)
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
 ```
-> ✅ **`Hello from Docker!` 메시지 출력 = Docker 설치·실행 환경 정상 작동!**  
-> 로컬에 이미지가 없어 자동으로 pull → 컨테이너 생성 → 실행 → 출력의 흐름을 확인할 수 있습니다.
 
-**Docker 동작 4단계 (출력 내용 정리)**
+✅ `Hello from Docker!` 출력 = **Docker 설치 · 실행 환경 정상 작동**
+
+로컬에 이미지가 없어 **자동 pull → 컨테이너 생성 → 실행 → 출력** 흐름이 그대로 확인된다.
+
+**출력이 설명하는 Docker 동작 4단계**
+
 1. Docker 클라이언트가 Docker 데몬에게 요청
 2. 데몬이 Docker Hub에서 `hello-world` 이미지를 다운로드
 3. 이미지로 컨테이너를 생성하고 실행
-4. 실행 결과를 터미널에 출력
+4. 실행 결과를 터미널로 스트리밍 출력
 
 ---
 
-## 2. Ubuntu 컨테이너 접속 (심화 실습)
-```bash
-rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash       
-root@f6f9cf42c238:/# ls
-bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+### 3.2 기본 운영 명령
+
+#### ① 이미지 검색 — `docker search`
+
+```console
+rhw02133670@c4r1s8 codyssey % docker search ubuntu
+NAME                DESCRIPTION                                     STARS     OFFICIAL
+ubuntu              Ubuntu is a Debian-based Linux operating sys…   17862     [OK]
+ubuntu/squid        Squid is a caching proxy for the Web. Long-t…   129       
+ubuntu/nginx        Nginx, a high-performance reverse proxy & we…   141       
+... (생략)
 ```
-> `hello-world` 안내 메시지에서 추천한 **"더 도전적인 실습"** 을 이어서 진행!  
-> `-it` 옵션으로 우분투 컨테이너 셸에 접속하여 리눅스 디렉토리 구조를 확인했습니다.
 
+- Docker Hub에서 이미지를 검색
+- `OFFICIAL [OK]` = 공식 이미지, `STARS` = 인기도
 
-## 기존 Dockerfile 기반 커스텀 이미지 제작
+#### ② 이미지 다운로드 — `docker pull`
 
+```console
+rhw02133670@c4r1s8 docker_test % docker pull ubuntu
+Using default tag: latest
+latest: Pulling from library/ubuntu
+ed819469700f: Pull complete 
+a3679419df18: Pull complete 
+Digest: sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+```
 
-## 🎯 에러 원인 분석
+- 태그를 생략하면 자동으로 `latest`를 받는다
+- 이미지는 여러 **레이어(layer)** 로 나뉘어 다운로드된다
 
-에러 메시지의 핵심:
+#### ③ 컨테이너 실행 — `docker run -it`
+
+```console
+rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash 
+root@a2911da37e52:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@a2911da37e52:/# exit
+exit
+```
+
+- `-i`(interactive) + `-t`(tty) 로 컨테이너 내부 셸에 접속
+- 프롬프트가 `root@컨테이너ID` 로 바뀌며 **격리된 우분투 환경**에 진입
+- `exit` 로 컨테이너를 빠져나옴
+
+#### ④ 이미지 목록 — `docker images`
+
+```console
+rhw02133670@c4r1s8 codyssey % docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+ubuntu       latest    de7345b16e94   2 weeks ago   100MB
+```
+
+로컬에 내려받은 이미지 목록과 `IMAGE ID` · `SIZE` 등 메타정보를 확인.
+
+#### ⑤ 실행 중인 컨테이너 — `docker ps`
+
+```console
+rhw02133670@c4r1s8 codyssey % docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+- **실행 중인** 컨테이너만 표시된다
+- 위에서 `exit` 로 종료했기 때문에 목록이 비어 있음
+- 💡 종료된 컨테이너까지 보려면 `docker ps -a`
+
+---
+
+## 4. 커스텀 이미지 제작 (Dockerfile)
+
+### 4.1 최종 Dockerfile
+
+```dockerfile
+# 1. 베이스 이미지 선택 (공식 NGINX)
+FROM nginx:latest
+
+# 2. 커스텀 포인트: 기본 웹페이지를 내 파일로 교체
+COPY src/index.html /usr/share/nginx/html/index.html
+
+# 3. 문서화용: 80번 포트 사용을 명시
+EXPOSE 80
+```
+
+| 지시어 | 역할 |
+|---|---|
+| `FROM nginx:latest` | 공식 NGINX 이미지를 베이스로 사용 |
+| `COPY` | NGINX 기본 페이지 위치에 내 `index.html`을 덮어씀 (**커스텀 핵심**) |
+| `EXPOSE 80` | 이 컨테이너가 80번 포트를 쓴다고 명시 (문서화 역할) |
+
+---
+
+### 4.2 트러블슈팅 — `COPY ... not found`
+
+#### 에러 메시지
+
 ```
 ERROR [2/2] COPY index.html /usr/share/nginx/html/index.html
 "/index.html": not found
 ```
-👉 **"index.html 파일을 찾을 수 없다"** 는 뜻이에요!
 
----
+#### 원인 분석
 
-### 🔍 왜 못 찾았을까요?
+빌드 시점의 폴더 구조는 다음과 같았다.
 
-빌드 위치의 폴더 구조를 보면:
 ```
 codyssey/
 ├── Dockerfile
@@ -265,167 +306,114 @@ codyssey/
     └── index.html   ← 파일이 여기 있음!
 ```
 
-그런데 Dockerfile에는 이렇게 적혀 있었어요:
+그런데 Dockerfile에는 이렇게 적혀 있었다.
+
 ```dockerfile
 COPY index.html ...   ← codyssey 바로 아래에서 찾음 → 없음! ❌
 ```
 
-> `index.html`이 `src` 폴더 **안에** 있는데, 밖에서 찾으니 못 찾은 거예요!
+`index.html`이 `src/` 안에 있는데 **바깥에서 찾았기 때문에** 실패한 것.
 
----
-
-## ✅ 해결 방법: 경로에 `src/` 추가
+#### 해결
 
 ```dockerfile
-FROM nginx:latest
-
-# 커스텀 포인트: src 폴더 안의 index.html을 교체
 COPY src/index.html /usr/share/nginx/html/index.html
-
-EXPOSE 80
 ```
 
-> **핵심**: `COPY 원본경로 대상경로`에서  
-> **원본경로**는 Dockerfile 위치 기준으로 적어야 해요!  
-> → `index.html` ❌ → `src/index.html` ✅
-
----
-
-## 📌 정리
-
+| 증상 | 원인 | 해결 |
+|---|---|---|
 | `index.html not found` | 파일이 `src/` 안에 있음 | `COPY src/index.html ...` |
 
----
-
-
-### 🚀 다시 빌드하기
-
-```bash
-docker build -t my-nginx .
-```
-
-```
-=> [internal] load build definition from Dockerfile                                                      0.1s
- => => transferring dockerfile: 295B                                                                      0.0s
- => [internal] load metadata for docker.io/library/nginx:latest                                           0.8s
- => [internal] load .dockerignore                                                                         0.1s
- => => transferring context: 2B                                                                           0.0s
- => [internal] load build context                                                                         0.1s
- => => transferring context: 318B                                                                         0.0s
- => [1/2] FROM docker.io/library/nginx:latest@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760a  4.0s
- => => resolve docker.io/library/nginx:latest@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760a  0.1s
- => => sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942 10.23kB / 10.23kB          0.0s
- => => sha256:4e5db4761e0ff445f7fd29aad680ad28e8abf7d204895557f145d65535abcc1c 9.09kB / 9.09kB            0.0s
- => => sha256:db4f612f385437d11eb26620a4f1d7efb3ff44e1296a3c21540b30454e6e2bf3 2.29kB / 2.29kB            0.0s
- => => sha256:062e450697faa5f02a3a74eba9864ee4d79bc9cfbd65769fc6cdff2c05c6a053 29.78MB / 29.78MB          0.7s
- => => sha256:82454cdbf456a77f9ff1bb88b121c2a739e38c30ea689c135c7cca6249eabe4e 33.33MB / 33.33MB          1.0s
- => => sha256:3c7ab7949321f47c96fc0918f9f72e8f51bd452cdef1e0dad9599880317380b9 626B / 626B                0.7s
- => => sha256:cacfcdd01f309c65d69372716e799ea741065ac1b1e60880b3a6981ae105cb55 955B / 955B                1.0s
- => => extracting sha256:062e450697faa5f02a3a74eba9864ee4d79bc9cfbd65769fc6cdff2c05c6a053                 1.0s
- => => sha256:b6698f04e005497a7f495c0719358d43890cb3997ad7b4ab0b06748247c574a3 403B / 403B                1.1s
- => => sha256:2bedaf25031a24fb70b9dc2d56cb17139186d1ae5fd2054ecbd0dfe1a69585ba 1.21kB / 1.21kB            1.2s
- => => sha256:d26f27cc8c41e321394cb3c9a80915d90d5f1f1d3cbbbcda3be00f13c53b041e 1.40kB / 1.40kB            1.3s
- => => extracting sha256:82454cdbf456a77f9ff1bb88b121c2a739e38c30ea689c135c7cca6249eabe4e                 0.7s
- => => extracting sha256:3c7ab7949321f47c96fc0918f9f72e8f51bd452cdef1e0dad9599880317380b9                 0.0s
- => => extracting sha256:cacfcdd01f309c65d69372716e799ea741065ac1b1e60880b3a6981ae105cb55                 0.0s
- => => extracting sha256:b6698f04e005497a7f495c0719358d43890cb3997ad7b4ab0b06748247c574a3                 0.0s
- => => extracting sha256:2bedaf25031a24fb70b9dc2d56cb17139186d1ae5fd2054ecbd0dfe1a69585ba                 0.0s
- => => extracting sha256:d26f27cc8c41e321394cb3c9a80915d90d5f1f1d3cbbbcda3be00f13c53b041e                 0.0s
- => [2/2] COPY src/index.html /usr/share/nginx/html/index.html                                            0.4s
- => exporting to image                                                                                    0.2s
- => => exporting layers                                                                                   0.1s
- => => writing image sha256:f8532955e1df869f9af96de669342940851bb5f08be21c334b47428d4c7dde0b              0.0s
- => => naming to docker.io/library/my-nginx                                                               0.0s
-
-```
+> **핵심 원칙:** `COPY 원본경로 대상경로` 에서 **원본경로는 Dockerfile 위치(빌드 컨텍스트) 기준**으로 적어야 한다.
+> `index.html` ❌ → `src/index.html` ✅
 
 ---
 
-## ✅ 빌드 성공 확인
+### 4.3 재빌드 결과
 
-로그에서 성공 신호들을 짚어볼게요!
+```console
+% docker build -t my-nginx .
+ => [internal] load build definition from Dockerfile                     0.1s
+ => => transferring dockerfile: 295B                                     0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest          0.8s
+ => [internal] load .dockerignore                                        0.1s
+ => => transferring context: 2B                                          0.0s
+ => [internal] load build context                                        0.1s
+ => => transferring context: 318B                                        0.0s
+ => [1/2] FROM docker.io/library/nginx:latest@sha256:5a88c9c454794...    4.0s
+ ...   (레이어 다운로드 / extracting 로그 생략)
+ => [2/2] COPY src/index.html /usr/share/nginx/html/index.html           0.4s
+ => exporting to image                                                   0.2s
+ => => exporting layers                                                  0.1s
+ => => writing image sha256:f8532955e1df869f9af96de669342940851bb5f0...  0.0s
+ => => naming to docker.io/library/my-nginx                              0.0s
 
-```
-=> [2/2] COPY src/index.html /usr/share/nginx/html/index.html   ✅
-```
-> 아까 실패했던 그 부분! 이번엔 **에러 없이 통과**했어요! 경로 수정이 딱 맞았죠 👏
-
-```
-=> exporting to image                                          ✅
-=> => naming to docker.io/library/my-nginx                     ✅
-```
-
-```
 [+] Building 5.9s (7/7) FINISHED
 ```
-> **7단계 전부 완료(FINISHED)** = 완벽한 빌드! 🎯
 
----
+**성공 신호 체크**
 
-## 🔍 이미지가 잘 만들어졌는지 확인하기
+| 로그 | 의미 |
+|---|---|
+| `[2/2] COPY src/index.html ...` | 앞서 실패했던 단계를 에러 없이 통과 ✅ |
+| `exporting to image` | 이미지로 내보내기 완료 ✅ |
+| `naming to docker.io/library/my-nginx` | 태그 `my-nginx` 부여 완료 ✅ |
+| `Building 5.9s (7/7) FINISHED` | 7단계 전부 완료 = 완벽한 빌드 🎯 |
 
-`ls`로 파일은 보셨으니, 이번엔 **Docker 이미지 목록**을 확인해봐요!
+**이미지 생성 확인**
 
-```bash
-docker images
-```
-
-여기에 `my-nginx`가 보이면 확실하게 성공한 거예요! 아마 이렇게 나올 거예요:
-
-```
+```console
+% docker images
 REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
 my-nginx     latest    f8532955e1df   ...             ...
 ```
 
-> `IMAGE ID`가 로그에 나온 `f8532955e1df...`와 일치하면 완벽! ✅
+빌드 로그의 `writing image sha256:f8532955e1df...` 와 `IMAGE ID`가 일치 → 정상 생성 확인 ✅
 
 ---
 
-Dockerfile 내용
+### 4.4 실행 및 포트 매핑
 
-# 1. 기존 베이스 이미지 선택 (공식 NGINX)
-FROM nginx:latest
+```console
+$ docker run -d -p 8080:80 my-nginx
+(컨테이너 ID 출력 — 채워넣기)
 
-# 2. 커스텀 포인트: 기본 웹페이지를 내 파일로 교체
-COPY index.html /usr/share/nginx/html/index.html
+$ docker ps
+CONTAINER ID   IMAGE      COMMAND   CREATED   STATUS   PORTS                  NAMES
+(0.0.0.0:8080->80/tcp 확인 — 채워넣기)
+```
 
-# 3. 문서화용: 80번 포트 사용을 명시
-EXPOSE 80
+**커스텀 페이지 접속 결과**
 
-FROM nginx:latest → 공식 NGINX 이미지를 베이스로 사용
-COPY → NGINX 기본 페이지 위치에 내 index.html을 덮어씀 (커스텀 핵심!)
-EXPOSE 80 → 이 컨테이너가 80번 포트를 쓴다고 명시 (문서화 역할)
+(여기에 스크린샷 URL 붙여넣기)
 
----
+포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
+격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
 
-## 실행 결과
-
-![포트 매핑 결과](portMapping.png)
-
-네! 실제 터미널 출력 결과를 그대로 포함해서 정리해 드릴게요. 이렇게 하면 나중에 봤을 때 "실제로 이렇게 동작했구나" 하고 바로 이해할 수 있어서 좋습니다. 👍
+> ⚠️ 위 콘솔 블록과 스크린샷은 원본 로그에서 비어 있던 구간입니다.
 
 ---
 
-### 📂 Docker 볼륨 데이터 영속성 실습 결과 보고서
+## 5. 볼륨 — 데이터 영속성 검증
 
-#### 1. 실습 목적
-컨테이너가 삭제되어도 데이터가 유지되는 **영속성(Persistence)**을 도커 볼륨으로 검증한다.
+### 5.1 실습 목적
 
----
+컨테이너가 **삭제되어도 데이터가 유지되는 영속성(Persistence)** 을 Docker 볼륨으로 검증한다.
 
-#### 2. 실습 과정 및 실제 출력 결과
+### 5.2 실습 과정 및 실제 출력
 
-**① 도커 볼륨 생성**
-```bash
+#### ① 볼륨 생성
+
+```console
 $ docker volume create my-volume
 my-volume
 ```
-> 💬 `my-volume`이라는 이름의 볼륨이 정상 생성됨.
 
-<br>
+💬 `my-volume` 이라는 이름의 볼륨이 정상 생성됨.
 
-**② 컨테이너 실행 및 데이터 저장**
-```bash
+#### ② 컨테이너 실행 및 데이터 저장
+
+```console
 $ docker run -it --name worker-container -v my-volume:/mnt/data alpine sh
 Unable to find image 'alpine:latest' locally
 latest: Pulling from library/alpine
@@ -438,40 +426,39 @@ Status: Downloaded newer image for alpine:latest
 data
 / # exit
 ```
-> 💬 컨테이너 내부 `/mnt/data`에 `hello.txt`를 생성하고 `"data"` 저장 확인.
 
-<br>
+💬 컨테이너 내부 `/mnt/data` 에 `hello.txt` 를 생성하고 `"data"` 저장 확인.
 
-**③ 컨테이너 삭제**
-```bash
+#### ③ 컨테이너 삭제
+
+```console
 $ docker rm worker-container
 worker-container
 ```
-> 💬 데이터를 생성했던 컨테이너를 완전히 삭제함.
 
-<br>
+💬 데이터를 생성했던 컨테이너를 완전히 삭제.
 
-**④ 데이터 영속성 최종 검증**
-```bash
+#### ④ 영속성 최종 검증
+
+```console
 $ docker run --rm -v my-volume:/mnt/data alpine cat /mnt/data/hello.txt 
 data
 ```
-> 💬 컨테이너를 삭제했음에도 새 컨테이너에서 **`data`** 출력 확인 → **영속성 검증 성공!**
+
+💬 컨테이너를 삭제했음에도 **새 컨테이너에서 `data` 출력 확인 → 영속성 검증 성공!**
+
+### 5.3 결론
+
+- 컨테이너를 삭제해도 **볼륨에 저장된 데이터는 호스트에 그대로 유지**된다.
+- 동일한 볼륨을 다시 마운트하면 **어떤 컨테이너에서든 데이터를 복구**할 수 있다.
 
 ---
 
-#### 3. 최종 결론
-*   컨테이너를 삭제해도 **볼륨에 저장된 데이터는 호스트에 그대로 유지**된다.
-*   동일한 볼륨을 다시 마운트하면 **어떤 컨테이너에서든 데이터를 복구**할 수 있다.
+## 6. Git 설정 및 GitHub 연동
 
----
+### 6.1 설정 확인 — `git config --list`
 
-
-## Git 설정 및 Github 연동
-
-git config
-
-```
+```console
 rhw02133670@c4r1s8 codyssey % git config --list
 credential.helper=osxkeychain
 init.defaultbranch=main
@@ -489,4 +476,32 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 ```
 
-![github 연동](githubScreen.png)
+### 6.2 항목별 의미
+
+| 항목 | 값 | 의미 |
+|---|---|---|
+| `credential.helper` | `osxkeychain` | macOS 키체인에 인증정보 저장 → 매번 로그인 불필요 |
+| `init.defaultbranch` | `main` | 새 저장소의 기본 브랜치 |
+| `user.name` / `user.email` | `Rhw0213` / … | 커밋에 기록되는 작성자 정보 |
+| `core.filemode` | `true` | 파일 실행 권한 변경을 Git이 추적 (2장 `chmod` 실습과 연결) |
+| `core.ignorecase` | `true` | macOS 파일시스템 특성상 대소문자 구분 안 함 |
+| `remote.origin.url` | `.../Rhw0213/codyssey.git` | GitHub 원격 저장소 연결 완료 |
+| `branch.main.remote` / `.merge` | `origin` / `refs/heads/main` | 로컬 `main` ↔ 원격 `origin/main` 추적 관계 설정 |
+
+✅ `remote.origin.url` 과 `branch.main` 추적 설정이 모두 존재 → **GitHub 연동 정상 완료**
+
+> ⚠️ **미기록 항목** — `git push` / `git status` 등 실제 연동 동작 출력이 원본에 없습니다.
+> `git push -u origin main` 결과 로그를 추가하면 연동 검증이 완성됩니다.
+
+---
+
+## 7. 최종 정리 — 이 미션에서 얻은 원칙
+
+| 원칙 | 근거가 된 실습 결과 |
+|---|---|
+| **이미지와 컨테이너는 분리된다** | 같은 `ubuntu` 이미지로 여러 컨테이너를 만들고 지워도 이미지는 `docker images` 에 그대로 남아 있었다 |
+| **컨테이너는 격리된 실행 환경이다** | `docker run -it` 진입 시 호스트와 무관한 독립 파일시스템(`/bin`, `/etc` …)이 보였다 |
+| **경로는 빌드 컨텍스트 기준이다** | `COPY index.html` 실패 → `COPY src/index.html` 성공으로 직접 확인 |
+| **연결은 명시해야 한다 (포트)** | `EXPOSE` 는 문서화일 뿐, 실제 접속은 `-p` 매핑이 있어야 가능 |
+| **상태는 컨테이너 밖에 둬야 한다 (볼륨)** | 컨테이너를 `rm` 한 뒤에도 새 컨테이너에서 `data` 를 다시 읽어냈다 |
+| **환경 설정 자체가 버전 관리 대상이다** | Dockerfile을 Git 저장소에 함께 두면 누구나 같은 환경을 재현할 수 있다 |
