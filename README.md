@@ -63,6 +63,7 @@ rhw02133670@c4r1s8 codyssey % rm -r test
 
 ## 리눅스 파일 권한 변경 실습
 
+```bash
 rhw02133670@c4r1s8 codyssey % touch test.txt
 rhw02133670@c4r1s8 codyssey % ls -l test.txt 
 -rw-r--r--  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
@@ -100,6 +101,7 @@ drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git
 drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 -rwx------   1 rhw02133670  rhw02133670     0 Jul 28 11:39 test.txt
 rhw02133670@c4r1s8 codyssey % 
+```
 
 파일 생성 및 초기 상태 확인
 명령어: touch test.txt / ls -l test.txt
