@@ -196,3 +196,46 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 > **현재 실행 중인** 컨테이너만 보여줍니다.  
 > `exit`로 컨테이너를 종료했기 때문에 목록이 비어 있습니다.  
 > 💡 종료된 컨테이너까지 보려면 `docker ps -a`를 사용합니다.
+
+## 컨테이너 실행 실습
+
+### 1. hello-world 실행 (설치 검증)
+```bash
+rhw02133670@c4r1s8 codyssey % docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+4f55086f7dd0: Pull complete 
+Digest: sha256:c3cbe1cc1aa588a64951ac6286e0df7b27fe2e6324b1001c619bb358770c0178
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+```
+> ✅ **`Hello from Docker!` 메시지 출력 = Docker 설치·실행 환경 정상 작동!**  
+> 로컬에 이미지가 없어 자동으로 pull → 컨테이너 생성 → 실행 → 출력의 흐름을 확인할 수 있습니다.
+
+**Docker 동작 4단계 (출력 내용 정리)**
+1. Docker 클라이언트가 Docker 데몬에게 요청
+2. 데몬이 Docker Hub에서 `hello-world` 이미지를 다운로드
+3. 이미지로 컨테이너를 생성하고 실행
+4. 실행 결과를 터미널에 출력
+
+---
+
+### 2. Ubuntu 컨테이너 접속 (심화 실습)
+```bash
+rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash       
+root@f6f9cf42c238:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+```
+> `hello-world` 안내 메시지에서 추천한 **"더 도전적인 실습"** 을 이어서 진행!  
+> `-it` 옵션으로 우분투 컨테이너 셸에 접속하여 리눅스 디렉토리 구조를 확인했습니다.
