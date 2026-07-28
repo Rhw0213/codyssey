@@ -29,8 +29,6 @@ Docker 설치 및 점검 → 컨테이너 실행/관리
 
 ## 터미널 조작 로그 기록
 
-### 현재 위치 및 권한 구조 확인
-
 ```bash
 rhw02133670@c4r1s8 codyssey % pwd
 /Users/rhw02133670/codyssey
@@ -62,3 +60,70 @@ README.md	test
 rhw02133670@c4r1s8 codyssey % rm -r test
 
 ```
+
+## 리눅스 파일 권한 변경 실습
+
+rhw02133670@c4r1s8 codyssey % touch test.txt
+rhw02133670@c4r1s8 codyssey % ls -l test.txt 
+-rw-r--r--  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
+rhw02133670@c4r1s8 codyssey % chmod 700 test.txt 
+rhw02133670@c4r1s8 codyssey % ls -l test.txt 
+-rwx------  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
+
+rhw02133670@c4r1s8 codyssey % mkdir myFolder
+rhw02133670@c4r1s8 codyssey % ls -ld myFolder 
+drwxr-xr-x  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
+rhw02133670@c4r1s8 codyssey % chmod 700 myFolder 
+rhw02133670@c4r1s8 codyssey % ls -ld
+drwxr-xr-x  7 rhw02133670  rhw02133670  224 Jul 28 13:07 .
+rhw02133670@c4r1s8 codyssey % ls
+README.md	myFolder	test.txt
+rhw02133670@c4r1s8 codyssey % ls -al
+total 24
+drwxr-xr-x   7 rhw02133670  rhw02133670   224 Jul 28 13:07 .
+drwxr-x---+ 23 rhw02133670  rhw02133670   736 Jul 28 13:05 ..
+-rw-r--r--@  1 rhw02133670  rhw02133670  6148 Jul 28 12:56 .DS_Store
+drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git
+-rw-r--r--   1 rhw02133670  rhw02133670  3664 Jul 28 13:05 README.md
+drwx------   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
+-rwx------   1 rhw02133670  rhw02133670     0 Jul 28 11:39 test.txt
+rhw02133670@c4r1s8 codyssey % ls -ld myFolder 
+drwx------  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
+rhw02133670@c4r1s8 codyssey % chmod -R 755 myFolder 
+rhw02133670@c4r1s8 codyssey % ls -al
+total 24
+drwxr-xr-x   7 rhw02133670  rhw02133670   224 Jul 28 13:07 .
+drwxr-x---+ 23 rhw02133670  rhw02133670   736 Jul 28 13:05 ..
+-rw-r--r--@  1 rhw02133670  rhw02133670  6148 Jul 28 12:56 .DS_Store
+drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git
+-rw-r--r--   1 rhw02133670  rhw02133670  3664 Jul 28 13:05 README.md
+drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
+-rwx------   1 rhw02133670  rhw02133670     0 Jul 28 11:39 test.txt
+rhw02133670@c4r1s8 codyssey % 
+
+파일 생성 및 초기 상태 확인
+명령어: touch test.txt / ls -l test.txt
+초기 권한: -rw-r--r--
+상태 분석:
+소유자 (rhw02133670): rw- (읽기 및 쓰기 가능)
+그룹 (rhw02133670): r-- (읽기만 가능)
+기타 사용자 (Others): r-- (읽기만 가능)
+설명: 파일을 생성하면 시스템의 기본 설정(umask)에 따라 소유자에게는 편집 권한이, 타인에게는 읽기 권한만 부여된 상태로 생성됩니다.
+
+권한 변경 실행
+명령어: chmod 700 test.txt
+숫자 모드(700)의 의미:
+7 (소유자): 4(읽기) + 2(쓰기) + 1(실행) = 모든 권한 부여
+0 (그룹): 권한 없음
+0 (기타): 권한 없음
+
+변경 후 상태 확인 및 비교
+명령어: ls -l test.txt
+변경 권한: -rwx------
+결과 분석:
+
+소유자: 기존 rw-에서 rwx로 변경되어 이제 이 파일을 실행할 수도 있게 되었습니다.
+그룹 및 기타 사용자: 기존의 읽기(r--) 권한이 모두 제거되어, 소유자 외에는 이 파일의 내용을 보거나 수정할 수 없는 보안이 강화된 상태가 되었습니다.
+
+chmod -R 755 myFolder
+하위 폴더까지 전부 권환 변경
