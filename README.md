@@ -129,3 +129,70 @@ rhw02133670@c4r1s8 codyssey %
 
 chmod -R 755 myFolder
 하위 폴더까지 전부 권환 변경
+
+
+## Docker 기본 운영 명령 수행
+
+### 1. 이미지 검색 (docker search)
+```bash
+rhw02133670@c4r1s8 codyssey % docker search ubuntu
+NAME                DESCRIPTION                                     STARS     OFFICIAL
+ubuntu              Ubuntu is a Debian-based Linux operating sys…   17862     [OK]
+ubuntu/squid        Squid is a caching proxy for the Web. Long-t…   129       
+ubuntu/nginx        Nginx, a high-performance reverse proxy & we…   141       
+... (생략)
+```
+> Docker Hub에서 `ubuntu` 관련 이미지를 검색합니다.  
+> `OFFICIAL [OK]` 표시는 공식 이미지를 의미하며, `STARS`는 인기도를 나타냅니다.
+
+---
+
+### 2. 이미지 다운로드 (docker pull)
+```bash
+rhw02133670@c4r1s8 docker_test % docker pull ubuntu
+Using default tag: latest
+latest: Pulling from library/ubuntu
+ed819469700f: Pull complete 
+a3679419df18: Pull complete 
+Digest: sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+```
+> 태그를 생략하면 자동으로 `latest` 버전을 받습니다.  
+> 이미지는 여러 **레이어(layer)** 로 나뉘어 다운로드됩니다.
+
+---
+
+### 3. 컨테이너 실행 (docker run -it)
+```bash
+rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash 
+root@a2911da37e52:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@a2911da37e52:/# exit
+exit
+```
+> `-i`(interactive) + `-t`(tty) 옵션으로 **컨테이너 내부 셸에 접속**합니다.  
+> 프롬프트가 `root@컨테이너ID`로 바뀌며, 격리된 우분투 환경에 진입합니다.  
+> `exit`로 컨테이너를 빠져나옵니다.
+
+---
+
+### 4. 이미지 목록 확인 (docker images)
+```bash
+rhw02133670@c4r1s8 codyssey % docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+ubuntu       latest    de7345b16e94   2 weeks ago   100MB
+```
+> 로컬에 다운로드된 이미지 목록을 보여줍니다.  
+> `IMAGE ID`, `SIZE` 등 이미지 메타정보를 확인할 수 있습니다.
+
+---
+
+### 5. 실행 중인 컨테이너 확인 (docker ps)
+```bash
+rhw02133670@c4r1s8 codyssey % docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+> **현재 실행 중인** 컨테이너만 보여줍니다.  
+> `exit`로 컨테이너를 종료했기 때문에 목록이 비어 있습니다.  
+> 💡 종료된 컨테이너까지 보려면 `docker ps -a`를 사용합니다.
