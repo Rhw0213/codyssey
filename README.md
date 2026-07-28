@@ -489,4 +489,4 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 ```
 
-![github 연동](githubScreen)
+![github 연동](githubScreen.png)
