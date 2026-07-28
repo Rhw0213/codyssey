@@ -402,4 +402,91 @@ EXPOSE 80 → 이 컨테이너가 80번 포트를 쓴다고 명시 (문서화 �
 
 ![포트 매핑 결과](portMapping.png)
 
+네! 실제 터미널 출력 결과를 그대로 포함해서 정리해 드릴게요. 이렇게 하면 나중에 봤을 때 "실제로 이렇게 동작했구나" 하고 바로 이해할 수 있어서 좋습니다. 👍
 
+---
+
+### 📂 Docker 볼륨 데이터 영속성 실습 결과 보고서
+
+#### 1. 실습 목적
+컨테이너가 삭제되어도 데이터가 유지되는 **영속성(Persistence)**을 도커 볼륨으로 검증한다.
+
+---
+
+#### 2. 실습 과정 및 실제 출력 결과
+
+**① 도커 볼륨 생성**
+```bash
+$ docker volume create my-volume
+my-volume
+```
+> 💬 `my-volume`이라는 이름의 볼륨이 정상 생성됨.
+
+<br>
+
+**② 컨테이너 실행 및 데이터 저장**
+```bash
+$ docker run -it --name worker-container -v my-volume:/mnt/data alpine sh
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+55afa1ecc21d: Pull complete 
+Digest: sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+Status: Downloaded newer image for alpine:latest
+
+/ # echo "data" > /mnt/data/hello.txt
+/ # cat /mnt/data/hello.txt 
+data
+/ # exit
+```
+> 💬 컨테이너 내부 `/mnt/data`에 `hello.txt`를 생성하고 `"data"` 저장 확인.
+
+<br>
+
+**③ 컨테이너 삭제**
+```bash
+$ docker rm worker-container
+worker-container
+```
+> 💬 데이터를 생성했던 컨테이너를 완전히 삭제함.
+
+<br>
+
+**④ 데이터 영속성 최종 검증**
+```bash
+$ docker run --rm -v my-volume:/mnt/data alpine cat /mnt/data/hello.txt 
+data
+```
+> 💬 컨테이너를 삭제했음에도 새 컨테이너에서 **`data`** 출력 확인 → **영속성 검증 성공!**
+
+---
+
+#### 3. 최종 결론
+*   컨테이너를 삭제해도 **볼륨에 저장된 데이터는 호스트에 그대로 유지**된다.
+*   동일한 볼륨을 다시 마운트하면 **어떤 컨테이너에서든 데이터를 복구**할 수 있다.
+
+---
+
+
+## Git 설정 및 Github 연동
+
+git config
+
+```
+rhw02133670@c4r1s8 codyssey % git config --list
+credential.helper=osxkeychain
+init.defaultbranch=main
+user.name=Rhw0213
+user.email=rhw0213@gmail.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.origin.url=https://github.com/Rhw0213/codyssey.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+```
+
+![github 연동](githubScreen)
