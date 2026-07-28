@@ -26,3 +26,39 @@ Docker 설치 및 점검 → 컨테이너 실행/관리
 "왜 이런 설계가 필요한지" 설명 가능한 형태로 정리
 
 한 줄 요약: 터미널·Docker·Git을 직접 손으로 세팅하며, **"여러 번 실행해도 똑같이 재현되는 환경"**을 만드는 사고방식을 체득하는 미션이에요! 💪
+
+## 터미널 조작 로그 기록
+
+### 현재 위치 및 권한 구조 확인
+
+```bash
+rhw02133670@c4r1s8 codyssey % pwd
+/Users/rhw02133670/codyssey
+
+rhw02133670@c4r1s8 codyssey % ls -al
+total 24
+drwxr-xr-x   5 rhw02133670  rhw02133670   160 Jul 28 11:20 .
+drwxr-x---+ 23 rhw02133670  rhw02133670   736 Jul 28 11:13 ..
+-rw-r--r--@  1 rhw02133670  rhw02133670  6148 Jul 28 11:10 .DS_Store
+drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 10:57 .git
+-rw-r--r--   1 rhw02133670  rhw02133670  1260 Jul 28 10:41 README.md
+
+rhw02133670@c4r1s8 codyssey % mkdir test
+rhw02133670@c4r1s8 codyssey % cd test
+
+rhw02133670@c4r1s8 test % touch hello.txt
+rhw02133670@c4r1s8 test % cat hello.txt
+
+rhw02133670@c4r1s8 test % mv hello.txt hi.txt
+rhw02133670@c4r1s8 test % mv hi.txt hi_backup.txt
+
+rhw02133670@c4r1s8 test % cp hi_backup.txt hi.txt
+rhw02133670@c4r1s8 test % rm hi.txt
+
+rhw02133670@c4r1s8 test % cd ..
+rhw02133670@c4r1s8 codyssey % ls
+README.md	test
+
+rhw02133670@c4r1s8 codyssey % rm -r test
+
+```
