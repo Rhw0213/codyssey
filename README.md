@@ -9,7 +9,6 @@
 리눅스 CLI (터미널)	작업 디렉토리·권한 관리
 Docker (컨테이너)	격리된 실행 환경 구성
 Git / GitHub		버전 관리 및 협업
-
 ### 📋 실습 흐름
 터미널로 작업 디렉토리와 권한 정리
 Docker 설치 및 점검 → 컨테이너 실행/관리
@@ -231,7 +230,7 @@ To generate this message, Docker took the following steps:
 
 ---
 
-### 2. Ubuntu 컨테이너 접속 (심화 실습)
+## 2. Ubuntu 컨테이너 접속 (심화 실습)
 ```bash
 rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash       
 root@f6f9cf42c238:/# ls
@@ -239,3 +238,168 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 ```
 > `hello-world` 안내 메시지에서 추천한 **"더 도전적인 실습"** 을 이어서 진행!  
 > `-it` 옵션으로 우분투 컨테이너 셸에 접속하여 리눅스 디렉토리 구조를 확인했습니다.
+
+
+## 기존 Dockerfile 기반 커스텀 이미지 제작
+
+
+## 🎯 에러 원인 분석
+
+에러 메시지의 핵심:
+```
+ERROR [2/2] COPY index.html /usr/share/nginx/html/index.html
+"/index.html": not found
+```
+👉 **"index.html 파일을 찾을 수 없다"** 는 뜻이에요!
+
+---
+
+### 🔍 왜 못 찾았을까요?
+
+빌드 위치의 폴더 구조를 보면:
+```
+codyssey/
+├── Dockerfile
+├── README.md
+└── src/
+    └── index.html   ← 파일이 여기 있음!
+```
+
+그런데 Dockerfile에는 이렇게 적혀 있었어요:
+```dockerfile
+COPY index.html ...   ← codyssey 바로 아래에서 찾음 → 없음! ❌
+```
+
+> `index.html`이 `src` 폴더 **안에** 있는데, 밖에서 찾으니 못 찾은 거예요!
+
+---
+
+## ✅ 해결 방법: 경로에 `src/` 추가
+
+```dockerfile
+FROM nginx:latest
+
+# 커스텀 포인트: src 폴더 안의 index.html을 교체
+COPY src/index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+```
+
+> **핵심**: `COPY 원본경로 대상경로`에서  
+> **원본경로**는 Dockerfile 위치 기준으로 적어야 해요!  
+> → `index.html` ❌ → `src/index.html` ✅
+
+---
+
+## 📌 정리
+
+| `index.html not found` | 파일이 `src/` 안에 있음 | `COPY src/index.html ...` |
+
+---
+
+
+### 🚀 다시 빌드하기
+
+```bash
+docker build -t my-nginx .
+```
+
+```
+=> [internal] load build definition from Dockerfile                                                      0.1s
+ => => transferring dockerfile: 295B                                                                      0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                           0.8s
+ => [internal] load .dockerignore                                                                         0.1s
+ => => transferring context: 2B                                                                           0.0s
+ => [internal] load build context                                                                         0.1s
+ => => transferring context: 318B                                                                         0.0s
+ => [1/2] FROM docker.io/library/nginx:latest@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760a  4.0s
+ => => resolve docker.io/library/nginx:latest@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760a  0.1s
+ => => sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942 10.23kB / 10.23kB          0.0s
+ => => sha256:4e5db4761e0ff445f7fd29aad680ad28e8abf7d204895557f145d65535abcc1c 9.09kB / 9.09kB            0.0s
+ => => sha256:db4f612f385437d11eb26620a4f1d7efb3ff44e1296a3c21540b30454e6e2bf3 2.29kB / 2.29kB            0.0s
+ => => sha256:062e450697faa5f02a3a74eba9864ee4d79bc9cfbd65769fc6cdff2c05c6a053 29.78MB / 29.78MB          0.7s
+ => => sha256:82454cdbf456a77f9ff1bb88b121c2a739e38c30ea689c135c7cca6249eabe4e 33.33MB / 33.33MB          1.0s
+ => => sha256:3c7ab7949321f47c96fc0918f9f72e8f51bd452cdef1e0dad9599880317380b9 626B / 626B                0.7s
+ => => sha256:cacfcdd01f309c65d69372716e799ea741065ac1b1e60880b3a6981ae105cb55 955B / 955B                1.0s
+ => => extracting sha256:062e450697faa5f02a3a74eba9864ee4d79bc9cfbd65769fc6cdff2c05c6a053                 1.0s
+ => => sha256:b6698f04e005497a7f495c0719358d43890cb3997ad7b4ab0b06748247c574a3 403B / 403B                1.1s
+ => => sha256:2bedaf25031a24fb70b9dc2d56cb17139186d1ae5fd2054ecbd0dfe1a69585ba 1.21kB / 1.21kB            1.2s
+ => => sha256:d26f27cc8c41e321394cb3c9a80915d90d5f1f1d3cbbbcda3be00f13c53b041e 1.40kB / 1.40kB            1.3s
+ => => extracting sha256:82454cdbf456a77f9ff1bb88b121c2a739e38c30ea689c135c7cca6249eabe4e                 0.7s
+ => => extracting sha256:3c7ab7949321f47c96fc0918f9f72e8f51bd452cdef1e0dad9599880317380b9                 0.0s
+ => => extracting sha256:cacfcdd01f309c65d69372716e799ea741065ac1b1e60880b3a6981ae105cb55                 0.0s
+ => => extracting sha256:b6698f04e005497a7f495c0719358d43890cb3997ad7b4ab0b06748247c574a3                 0.0s
+ => => extracting sha256:2bedaf25031a24fb70b9dc2d56cb17139186d1ae5fd2054ecbd0dfe1a69585ba                 0.0s
+ => => extracting sha256:d26f27cc8c41e321394cb3c9a80915d90d5f1f1d3cbbbcda3be00f13c53b041e                 0.0s
+ => [2/2] COPY src/index.html /usr/share/nginx/html/index.html                                            0.4s
+ => exporting to image                                                                                    0.2s
+ => => exporting layers                                                                                   0.1s
+ => => writing image sha256:f8532955e1df869f9af96de669342940851bb5f08be21c334b47428d4c7dde0b              0.0s
+ => => naming to docker.io/library/my-nginx                                                               0.0s
+
+```
+
+---
+
+## ✅ 빌드 성공 확인
+
+로그에서 성공 신호들을 짚어볼게요!
+
+```
+=> [2/2] COPY src/index.html /usr/share/nginx/html/index.html   ✅
+```
+> 아까 실패했던 그 부분! 이번엔 **에러 없이 통과**했어요! 경로 수정이 딱 맞았죠 👏
+
+```
+=> exporting to image                                          ✅
+=> => naming to docker.io/library/my-nginx                     ✅
+```
+
+```
+[+] Building 5.9s (7/7) FINISHED
+```
+> **7단계 전부 완료(FINISHED)** = 완벽한 빌드! 🎯
+
+---
+
+## 🔍 이미지가 잘 만들어졌는지 확인하기
+
+`ls`로 파일은 보셨으니, 이번엔 **Docker 이미지 목록**을 확인해봐요!
+
+```bash
+docker images
+```
+
+여기에 `my-nginx`가 보이면 확실하게 성공한 거예요! 아마 이렇게 나올 거예요:
+
+```
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+my-nginx     latest    f8532955e1df   ...             ...
+```
+
+> `IMAGE ID`가 로그에 나온 `f8532955e1df...`와 일치하면 완벽! ✅
+
+---
+
+Dockerfile 내용
+
+# 1. 기존 베이스 이미지 선택 (공식 NGINX)
+FROM nginx:latest
+
+# 2. 커스텀 포인트: 기본 웹페이지를 내 파일로 교체
+COPY index.html /usr/share/nginx/html/index.html
+
+# 3. 문서화용: 80번 포트 사용을 명시
+EXPOSE 80
+
+FROM nginx:latest → 공식 NGINX 이미지를 베이스로 사용
+COPY → NGINX 기본 페이지 위치에 내 index.html을 덮어씀 (커스텀 핵심!)
+EXPOSE 80 → 이 컨테이너가 80번 포트를 쓴다고 명시 (문서화 역할)
+
+---
+
+## 실행 결과
+
+![포트 매핑 결과](portMapping.png)
+
+
