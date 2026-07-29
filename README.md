@@ -166,6 +166,12 @@ drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 
 ## 3. Docker 기초
 
+docker version
+```console
+rhw02133670@c4r1s4 codyssey % docker --version
+Docker version 29.4.0, build 9d7ad9f
+```
+
 ### 3.1 설치 검증 — hello-world
 
 ```console
@@ -259,7 +265,13 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 - **실행 중인** 컨테이너만 표시된다
 - 위에서 `exit` 로 종료했기 때문에 목록이 비어 있음
 - 💡 종료된 컨테이너까지 보려면 `docker ps -a`
-
+```console
+rhw02133670@c4r1s4 codyssey % docker ps -a
+CONTAINER ID   IMAGE           COMMAND                  CREATED       STATUS                       PORTS     NAMES
+0c0134a8e7d3   nginx:latest    "/docker-entrypoint.…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-web-1
+e13c567220d1   redis:latest    "docker-entrypoint.s…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-cache-1
+8889f7c235d3   alpine:latest   "sh -c 'echo 포트는 …"   6 hours ago   Exited (137) 7 minutes ago             codyssey-app-1
+```
 ---
 
 ## 4. 커스텀 이미지 제작 (Dockerfile)
@@ -453,6 +465,19 @@ data
 ---
 
 ## 6. Git 설정 및 GitHub 연동
+
+git --version
+
+```console
+rhw02133670@c4r1s4 codyssey % git --version
+git version 2.53.0
+```
+
+git push
+
+```console
+
+```
 
 ### 6.1 설정 확인 — `git config --list`
 
