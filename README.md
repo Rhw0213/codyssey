@@ -396,6 +396,9 @@ $ docker run -d -p 8080:80 my-nginx
 
 포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
 격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
+다시말해
+각 컨테이너는 리눅스 네트워크 네임스페이스로 인해 독립된 IP·라우팅 테이블·포트 공간을 갖고 기본적으로 외부와 단절되어 있기 때문에, -p <호스트포트>:<컨테이너포트> 방식의 포트 포워딩으로 호스트 네트워크와의 통신 경로를 열어 주어야 서비스에 접근할 수 있다.
+
 
 > 📌 이 시점의 `docker ps` 출력은 원본 로그에 없지만, **8.2에서 같은 매핑이 실측으로 확인**된다.
 > ```
@@ -476,7 +479,16 @@ git version 2.53.0
 git push
 
 ```console
-
+rhw02133670@c4r1s4 codyssey % git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 6 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 631 bytes | 631.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:Rhw0213/codyssey.git
+   269f4ab..49e6501  main -> main
 ```
 
 ### 6.1 설정 확인 — `git config --list`
@@ -672,6 +684,22 @@ d40e1afd0aa8   alpine:latest   "sleep infinity"         12 seconds ago   Up 11 s
 여기서 중요한 결론이 나온다. **매핑이 없어도 컨테이너끼리는 서로 통신할 수 있다.** 매핑은 "**바깥**에서 들어오는 길"을 뚫는 것이지, 내부 통신과는 별개다. Redis를 외부에 열지 않는 건 보안상 오히려 정상이다.
 
 ---
+
+**`PORTS` 충돌시**
+
+```bash
+# 1. 포트 확인
+sudo ss -ltnp | grep :8080
+
+# 2. 프로세스 종료
+kill <PID>          # 안 되면 kill -9 <PID>
+
+# 3. 또는 포트 변경 후 실행
+docker run -p 8081:80 <이미지명>
+
+# 4. 재확인
+sudo ss -ltnp | grep :8081
+```
 
 ### 8.3 컨테이너 간 통신 테스트
 
