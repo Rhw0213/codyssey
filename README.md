@@ -380,7 +380,7 @@ $ docker run -d -p 8080:80 my-nginx
 
 **커스텀 페이지 접속 결과**
 
-![포트 매핑 증거 — 컨테이너 실행 및 접속 확인](https://raw.githubusercontent.com/Rhw0213/codyssey/main/portMapping.png)
+![포트 매핑 증거 — 컨테이너 실행 및 접속 확인](portMapping.png)
 
 포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
 격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
@@ -461,7 +461,7 @@ rhw02133670@c4r1s8 codyssey % git config --list
 credential.helper=osxkeychain
 init.defaultbranch=main
 user.name=Rhw0213
-user.email=rhw0213@gmail.com
+user.email=***@***.com
 core.repositoryformatversion=0
 core.filemode=true
 core.bare=false
@@ -490,7 +490,7 @@ branch.main.merge=refs/heads/main
 
 ### 6.3 GitHub 연동 화면
 
-![깃허브 연동 결과](https://raw.githubusercontent.com/Rhw0213/codyssey/main/githubScreen.png)
+![깃허브 연동 결과](githubScreen.png)
 
 
 ---
@@ -827,14 +827,14 @@ DB 비밀번호나 API 키를 이미지에 넣지 않는 이유도 같은 맥락
 ### 10.1 키 생성
 
 ```console
-rhw02133670@c4r1s4 codyssey % ssh-keygen -t ed25519 -C "rhw0213@gmail.com"
+rhw02133670@c4r1s4 codyssey % ssh-keygen -t ed25519 -C "***@***.com"
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (/Users/rhw02133670/.ssh/id_ed25519): 
 Enter passphrase for "/Users/rhw02133670/.ssh/id_ed25519" (empty for no passphrase): 
 Your identification has been saved in /Users/rhw02133670/.ssh/id_ed25519
 Your public key has been saved in /Users/rhw02133670/.ssh/id_ed25519.pub
 The key fingerprint is:
-SHA256:H3lTR347s8pDBMN+rwoUb2IPT6lK4Vox5fG0Dk9RysE rhw0213@gmail.com
+SHA256:******************************** ***@***.com
 ```
 
 | 옵션 | 의미 |
@@ -867,7 +867,7 @@ drwxr-x---+ 21 rhw02133670  rhw02133670  672 Jul 29 11:06 ..
 
 ```console
 rhw02133670@c4r1s4 codyssey % cat ~/.ssh/id_ed25519.pub 
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPAxz1DMynun0CptWX/Ax655XpmDIFUtnTfhAvUnf4/K rhw0213@gmail.com
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA******************************** ***@***.com
 ```
 
 이 **공개키만** GitHub 설정에 등록한다. 개인키는 절대 밖으로 내보내지 않는다.
