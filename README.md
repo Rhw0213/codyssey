@@ -380,7 +380,7 @@ $ docker run -d -p 8080:80 my-nginx
 
 **커스텀 페이지 접속 결과**
 
-![포트 매핑 증거 — 컨테이너 실행 및 접속 확인](portMapping.png)
+![포트 매핑 증거 — 컨테이너 실행 및 접속 확인](web/portMapping.png)
 
 포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
 격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
@@ -490,7 +490,7 @@ branch.main.merge=refs/heads/main
 
 ### 6.3 GitHub 연동 화면
 
-![깃허브 연동 결과](githubScreen.png)
+![깃허브 연동 결과](web/githubScreen.png)
 
 
 ---
