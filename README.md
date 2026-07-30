@@ -32,25 +32,31 @@
 
 ```console
 $ sw_vers
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % sw_vers
+ProductName:		macOS
+ProductVersion:		15.7.4
+BuildVersion:		24G517
 
 $ echo $SHELL
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % echo $SHELL
+/bin/zsh
 
 $ docker --version
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker --version
+Docker version 28.5.2, build ecc6942
 
 $ git --version
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % git --version
+git version 2.53.0
 ```
 
 | 항목 | 값 |
 |---|---|
-| OS | macOS (버전 채우기) |
-| 쉘 / 터미널 | zsh (`%` 프롬프트로 확인) / (터미널 앱 채우기) |
+| OS | macOS 15.7.4 |
+| 쉘 / 터미널 | zsh 
 | 컨테이너 런타임 | **OrbStack** |
-| Docker 버전 | (채우기) |
-| Git 버전 | (채우기) |
+| Docker 버전 | (28.5.2) |
+| Git 버전 | (2.53.0) |
 
 > ⛔ **미기록 — 과제 §4 필수 항목.** 위 4개 명령을 실행해 출력을 채워야 한다.
 
@@ -398,15 +404,7 @@ $ docker stats --no-stream
 ## 9. 컨테이너 실행 실습
 
 ### 9.1 hello-world
-=======
-docker version
-```console
-rhw02133670@c4r1s4 codyssey % docker --version
-Docker version 29.4.0, build 9d7ad9f
-```
 
-### 3.1 설치 검증 — hello-world
->>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 
 ```console
 rhw02133670@c4r1s8 codyssey % docker run hello-world
@@ -581,8 +579,6 @@ $ docker run -d -p 8080:80 my-nginx
 다시말해
 각 컨테이너는 리눅스 네트워크 네임스페이스로 인해 독립된 IP·라우팅 테이블·포트 공간을 갖고 기본적으로 외부와 단절되어 있기 때문에, -p <호스트포트>:<컨테이너포트> 방식의 포트 포워딩으로 호스트 네트워크와의 통신 경로를 열어 주어야 서비스에 접근할 수 있다.
 
->>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
-
 | | 역할 | 실제 연결 |
 |---|---|---|
 | `EXPOSE 80` | "80번을 쓴다"는 문서/메모 | ❌ |
@@ -615,18 +611,27 @@ $ docker run -d -p 8080:80 my-nginx
 ```console
 # ① 호스트 소스를 컨테이너에 바인드 마운트하여 실행
 $ docker run -d -p 8080:80 -v $(pwd)/src:/usr/share/nginx/html my-nginx
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker run -d -p 8080:80 -v $(pwd)/src:/usr/share/nginx/html my-nginx
+4ea709be0d033d7bba96bd823e65ac668e351816eb6816a24d4a2351832967b2
 
 # ② 변경 전 응답 확인
 $ curl localhost:8080
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % curl localhost:8080
+<html>
+<head><title>403 Forbidden</title></head>
+<body>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.31.3</center>
+</body>
+</html>
 
 # ③ 호스트 파일 수정 (재빌드 없이!)
 $ echo "<h1>바인드 마운트 반영 테스트</h1>" >> src/index.html
 
 # ④ 변경 후 응답 확인
 $ curl localhost:8080
-(출력 붙여넣기 — 수정 내용이 나타나야 함)
+rhw02133670@c4r1s8 codyssey % curl localhost:8080                                        
+<h1>바인드 마운트 반영 테스트</h1>
 ```
 
 ### 12.3 전/후 비교
