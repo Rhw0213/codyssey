@@ -288,6 +288,7 @@ drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 
 ## 7. Docker 설치 및 기본 점검
 
+<<<<<<< HEAD
 ```console
 $ docker --version
 (출력 붙여넣기)
@@ -397,6 +398,15 @@ $ docker stats --no-stream
 ## 9. 컨테이너 실행 실습
 
 ### 9.1 hello-world
+=======
+docker version
+```console
+rhw02133670@c4r1s4 codyssey % docker --version
+Docker version 29.4.0, build 9d7ad9f
+```
+
+### 3.1 설치 검증 — hello-world
+>>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 
 ```console
 rhw02133670@c4r1s8 codyssey % docker run hello-world
@@ -454,8 +464,28 @@ $ docker ps -a                            # → obs-test 가 Exited
 
 **관찰 포인트:** 컨테이너는 **주 프로세스가 끝나면 함께 종료된다.** `attach`는 그 주 프로세스에 붙는 것이라 나오면 컨테이너도 죽고, `exec`는 별도 프로세스를 새로 띄우는 것이라 나와도 컨테이너가 유지된다. 그래서 운영 중인 컨테이너를 들여다볼 때는 `exec`를 쓴다.
 
+<<<<<<< HEAD
 > 실제로 이 문서 [16.2](#162-멀티-컨테이너와-통신)의 통신 테스트에서 `docker exec -it codyssey-app-1 sh` 를 사용했고, 테스트 후에도 컨테이너가 계속 살아 있었다.
 
+=======
+#### ⑤ 실행 중인 컨테이너 — `docker ps`
+
+```console
+rhw02133670@c4r1s8 codyssey % docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+- **실행 중인** 컨테이너만 표시된다
+- 위에서 `exit` 로 종료했기 때문에 목록이 비어 있음
+- 💡 종료된 컨테이너까지 보려면 `docker ps -a`
+```console
+rhw02133670@c4r1s4 codyssey % docker ps -a
+CONTAINER ID   IMAGE           COMMAND                  CREATED       STATUS                       PORTS     NAMES
+0c0134a8e7d3   nginx:latest    "/docker-entrypoint.…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-web-1
+e13c567220d1   redis:latest    "docker-entrypoint.s…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-cache-1
+8889f7c235d3   alpine:latest   "sh -c 'echo 포트는 …"   6 hours ago   Exited (137) 7 minutes ago             codyssey-app-1
+```
+>>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 ---
 
 ## 10. 커스텀 이미지 제작 (Dockerfile)
@@ -543,7 +573,15 @@ $ docker run -d -p 8080:80 my-nginx
 
 주소창의 **`localhost:8080`** 과 커스텀 페이지(`🚀 Codyssey Docker 미션 성공!`)가 함께 보인다 → 매핑 및 커스텀 이미지 적용이 동시에 증명된다.
 
+<<<<<<< HEAD
 **판정 근거:** `-p 호스트포트:컨테이너포트`
+=======
+포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
+격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
+다시말해
+각 컨테이너는 리눅스 네트워크 네임스페이스로 인해 독립된 IP·라우팅 테이블·포트 공간을 갖고 기본적으로 외부와 단절되어 있기 때문에, -p <호스트포트>:<컨테이너포트> 방식의 포트 포워딩으로 호스트 네트워크와의 통신 경로를 열어 주어야 서비스에 접근할 수 있다.
+
+>>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 
 | | 역할 | 실제 연결 |
 |---|---|---|
@@ -668,7 +706,33 @@ data
 
 ## 14. Git 설정 및 GitHub 연동
 
+<<<<<<< HEAD
 ### 14.1 설정 확인
+=======
+git --version
+
+```console
+rhw02133670@c4r1s4 codyssey % git --version
+git version 2.53.0
+```
+
+git push
+
+```console
+rhw02133670@c4r1s4 codyssey % git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 6 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 631 bytes | 631.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:Rhw0213/codyssey.git
+   269f4ab..49e6501  main -> main
+```
+
+### 6.1 설정 확인 — `git config --list`
+>>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 
 ```console
 rhw02133670@c4r1s8 codyssey % git config --list
@@ -896,7 +960,46 @@ d40e1afd0aa8   alpine:latest   "sleep infinity"         12 seconds ago   Up 11 s
 
 **매핑이 없어도 컨테이너끼리는 통신된다.** 매핑은 "바깥에서 들어오는 길"이지 내부 통신과는 별개다.
 
+<<<<<<< HEAD
 **통신 테스트 — 이름으로 주소 찾기**
+=======
+---
+
+**`PORTS` 충돌시**
+
+```bash
+# 1. 포트 확인
+sudo ss -ltnp | grep :8080
+
+# 2. 프로세스 종료
+kill <PID>          # 안 되면 kill -9 <PID>
+
+# 3. 또는 포트 변경 후 실행
+docker run -p 8081:80 <이미지명>
+
+# 4. 재확인
+sudo ss -ltnp | grep :8081
+```
+
+### 8.3 컨테이너 간 통신 테스트
+
+#### 트러블슈팅 — 옵션 오타
+
+```console
+/ # apk add --nocache bind-tools curl
+ERROR: command line: unrecognized option 'nocache'
+
+/ # apk add --no-cache bind-tools curl
+(1/23) Installing fstrm (0.6.1-r4)
+...
+(23/23) Installing curl (8.21.0-r0)
+OK: 20.0 MiB in 39 packages
+```
+
+`--nocache` ❌ → `--no-cache` ✅ (하이픈 누락)
+
+#### ① 이름으로 주소 찾기 — `nslookup`
+>>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
 
 ```console
 / # nslookup cache
