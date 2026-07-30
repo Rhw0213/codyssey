@@ -294,7 +294,6 @@ drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 
 ## 7. Docker 설치 및 기본 점검
 
-<<<<<<< HEAD
 ```console
 $ docker --version
 (출력 붙여넣기)
@@ -375,13 +374,25 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 ```console
 $ docker run -d --name test-nginx nginx:latest
-(컨테이너 ID 출력)
+rhw02133670@c4r1s8 codyssey % docker run -d --name test-nginx nginx:latest
+c2be7b63698060215a1d9892b393876e2f01d0b34ad4707c7a486caf08802e1a
 
 $ docker stop test-nginx
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker stop test-nginx
+test-nginx
 
 $ docker ps -a
-(종료된 컨테이너까지 STATUS: Exited 로 표시되는 것 확인)
+rhw02133670@c4r1s8 codyssey % docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                      PORTS     NAMES
+c2be7b636980   nginx:latest   "/docker-entrypoint.…"   40 minutes ago   Exited (0) 38 minutes ago             test-nginx
+d7dfdce822a5   my-nginx       "/docker-entrypoint.…"   42 minutes ago   Exited (0) 41 minutes ago             nginx
+a4471630d500   my-nginx       "/docker-entrypoint.…"   2 hours ago      Exited (0) 41 minutes ago             cranky_kowalevski
+4ea709be0d03   my-nginx       "/docker-entrypoint.…"   2 hours ago      Exited (0) 40 minutes ago             mystifying_grothendieck
+0b61f0556651   my-nginx       "/docker-entrypoint.…"   47 hours ago     Exited (0) 46 hours ago               funny_fermi
+f6f9cf42c238   ubuntu         "/bin/bash"              47 hours ago     Exited (0) 47 hours ago               boring_bassi
+0a7a507bae86   hello-world    "/hello"                 47 hours ago     Exited (0) 47 hours ago               intelligent_bohr
+8d07fe5c406b   ubuntu         "/bin/bash"              2 days ago       Exited (127) 2 days ago               hardcore_swanson
+a2911da37e52   ubuntu         "/bin/bash"              2 days ago       Exited (0) 2 days ago                 relaxed_hoover
 ```
 
 > ⛔ **미기록 — 과제 §4 필수.** `docker ps`(실행 중만)와 `docker ps -a`(전체)의 차이를 보여주는 것이 목적.
@@ -390,10 +401,69 @@ $ docker ps -a
 
 ```console
 $ docker logs test-nginx
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker logs test-nginx
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2026/07/30 04:01:08 [notice] 1#1: using the "epoll" event method
+2026/07/30 04:01:08 [notice] 1#1: nginx/1.31.3
+2026/07/30 04:01:08 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19) 
+2026/07/30 04:01:08 [notice] 1#1: OS: Linux 6.17.8-orbstack-00308-g8f9c941121b1
+2026/07/30 04:01:08 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 20480:1048576
+2026/07/30 04:01:08 [notice] 1#1: start worker processes
+2026/07/30 04:01:08 [notice] 1#1: start worker process 29
+2026/07/30 04:01:08 [notice] 1#1: start worker process 30
+2026/07/30 04:01:08 [notice] 1#1: start worker process 31
+2026/07/30 04:01:08 [notice] 1#1: start worker process 32
+2026/07/30 04:01:08 [notice] 1#1: start worker process 33
+2026/07/30 04:01:08 [notice] 1#1: start worker process 34
+2026/07/30 04:02:48 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+2026/07/30 04:02:48 [notice] 30#30: gracefully shutting down
+2026/07/30 04:02:48 [notice] 30#30: exiting
+2026/07/30 04:02:48 [notice] 30#30: exit
+2026/07/30 04:02:48 [notice] 29#29: gracefully shutting down
+2026/07/30 04:02:48 [notice] 29#29: exiting
+2026/07/30 04:02:48 [notice] 29#29: exit
+2026/07/30 04:02:48 [notice] 31#31: gracefully shutting down
+2026/07/30 04:02:48 [notice] 31#31: exiting
+2026/07/30 04:02:48 [notice] 31#31: exit
+2026/07/30 04:02:48 [notice] 33#33: gracefully shutting down
+2026/07/30 04:02:48 [notice] 33#33: exiting
+2026/07/30 04:02:48 [notice] 33#33: exit
+2026/07/30 04:02:48 [notice] 32#32: gracefully shutting down
+2026/07/30 04:02:48 [notice] 32#32: exiting
+2026/07/30 04:02:48 [notice] 34#34: gracefully shutting down
+2026/07/30 04:02:48 [notice] 32#32: exit
+2026/07/30 04:02:48 [notice] 34#34: exiting
+2026/07/30 04:02:48 [notice] 34#34: exit
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 32
+2026/07/30 04:02:48 [notice] 1#1: worker process 32 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 31
+2026/07/30 04:02:48 [notice] 1#1: worker process 31 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 30
+2026/07/30 04:02:48 [notice] 1#1: worker process 30 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 34
+2026/07/30 04:02:48 [notice] 1#1: worker process 34 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 29
+2026/07/30 04:02:48 [notice] 1#1: worker process 29 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
+2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 33
+2026/07/30 04:02:48 [notice] 1#1: worker process 33 exited with code 0
+2026/07/30 04:02:48 [notice] 1#1: exit
 
 $ docker stats --no-stream
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker stats --no-stream
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O   BLOCK I/O   PIDS
 ```
 
 > ⛔ **미기록 — 과제 §4 필수.** `docker-compose logs`는 [16.3](#163-운영-명령)에 있으나, 단일 컨테이너 대상 `docker logs` / `docker stats`는 별도 기록이 필요하다.
@@ -436,13 +506,10 @@ rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash
 root@f6f9cf42c238:/# ls
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 root@f6f9cf42c238:/# echo "Hello from container"
-(출력 붙여넣기)
+hello from container
 root@f6f9cf42c238:/# exit
 ```
 
-호스트와 무관한 **독립 파일시스템**(`/bin`, `/etc`, `/usr` …)이 보인다 = 격리 확인.
-
-> ⛔ **`echo` 미수행 — 과제 §4 필수.** `ls`만 기록되어 있다. 위 `echo` 한 줄을 실행해 출력을 채우면 된다.
 
 ### 9.3 attach 와 exec 의 차이
 
@@ -454,37 +521,30 @@ $ docker run -dit --name obs-test ubuntu /bin/bash
 $ docker exec -it obs-test /bin/bash     # 새 프로세스로 진입
 root@...:/# exit                          # 나와도 컨테이너는 살아있음
 $ docker ps                               # → obs-test 가 여전히 Up
+rhw02133670@c4r1s8 codyssey % docker exec -it obs-test /bin/bash
+root@a414bca03e28:/# exit
+exit
+rhw02133670@c4r1s8 codyssey % docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS     NAMES
+a414bca03e28   ubuntu    "/bin/bash"   7 minutes ago   Up 21 seconds             obs-test
 
 $ docker attach obs-test                  # 주 프로세스에 직접 연결
 root@...:/# exit                          # 주 프로세스가 끝나므로 컨테이너도 종료
 $ docker ps -a                            # → obs-test 가 Exited
+
+rhw02133670@c4r1s8 codyssey % docker attach obs-test
+root@a414bca03e28:/# exit
+exit
+rhw02133670@c4r1s8 codyssey % docker ps             
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
 ```
 
 **관찰 포인트:** 컨테이너는 **주 프로세스가 끝나면 함께 종료된다.** `attach`는 그 주 프로세스에 붙는 것이라 나오면 컨테이너도 죽고, `exec`는 별도 프로세스를 새로 띄우는 것이라 나와도 컨테이너가 유지된다. 그래서 운영 중인 컨테이너를 들여다볼 때는 `exec`를 쓴다.
 
-<<<<<<< HEAD
 > 실제로 이 문서 [16.2](#162-멀티-컨테이너와-통신)의 통신 테스트에서 `docker exec -it codyssey-app-1 sh` 를 사용했고, 테스트 후에도 컨테이너가 계속 살아 있었다.
 
-=======
-#### ⑤ 실행 중인 컨테이너 — `docker ps`
-
-```console
-rhw02133670@c4r1s8 codyssey % docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-```
-
-- **실행 중인** 컨테이너만 표시된다
-- 위에서 `exit` 로 종료했기 때문에 목록이 비어 있음
-- 💡 종료된 컨테이너까지 보려면 `docker ps -a`
-```console
-rhw02133670@c4r1s4 codyssey % docker ps -a
-CONTAINER ID   IMAGE           COMMAND                  CREATED       STATUS                       PORTS     NAMES
-0c0134a8e7d3   nginx:latest    "/docker-entrypoint.…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-web-1
-e13c567220d1   redis:latest    "docker-entrypoint.s…"   6 hours ago   Exited (0) 7 minutes ago               codyssey-cache-1
-8889f7c235d3   alpine:latest   "sh -c 'echo 포트는 …"   6 hours ago   Exited (137) 7 minutes ago             codyssey-app-1
-```
->>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
----
 
 ## 10. 커스텀 이미지 제작 (Dockerfile)
 
@@ -594,8 +654,6 @@ $ docker run -d -p 8080:80 my-nginx
 ---
 ## 12. 바인드 마운트 — 변경 반영 검증
 
-> ⛔ **미수행 — 과제 §2 필수 산출물.** "바인드 마운트: 실행 명령 + 호스트 변경 전/후 비교"가 요구되어 있으나 수행 기록이 없다. 아래 절차를 그대로 실행하면 된다.
-
 ### 12.1 목적
 
 **볼륨과의 차이를 구분하는 것이 핵심이다.**
@@ -633,13 +691,6 @@ $ curl localhost:8080
 rhw02133670@c4r1s8 codyssey % curl localhost:8080                                        
 <h1>바인드 마운트 반영 테스트</h1>
 ```
-
-### 12.3 전/후 비교
-
-| | 호스트 `src/index.html` | `curl localhost:8080` 응답 |
-|---|---|---|
-| 변경 전 | (원본) | (채우기) |
-| 변경 후 | 한 줄 추가 | (채우기 — 추가분 반영) |
 
 **확인 포인트:** **이미지를 다시 빌드하지 않았는데도** 응답이 바뀐다. 컨테이너가 호스트 디렉토리를 직접 들여다보기 때문이다. 그래서 개발 중에는 바인드 마운트를 쓴다(코드 수정 → 즉시 확인). 반대로 [10.3](#103-빌드-결과)의 `COPY`는 빌드 시점에 파일을 이미지 **안으로 복사**하므로, 호스트를 고쳐도 반영되지 않는다.
 
@@ -711,9 +762,9 @@ data
 
 ## 14. Git 설정 및 GitHub 연동
 
-<<<<<<< HEAD
+
 ### 14.1 설정 확인
-=======
+
 git --version
 
 ```console
@@ -737,7 +788,7 @@ To github.com:Rhw0213/codyssey.git
 ```
 
 ### 6.1 설정 확인 — `git config --list`
->>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
+
 
 ```console
 rhw02133670@c4r1s8 codyssey % git config --list
