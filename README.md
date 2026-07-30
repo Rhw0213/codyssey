@@ -657,7 +657,7 @@ my-nginx     latest    f8532955e1df   ...             ...
 $ docker run -d -p 8080:80 my-nginx
 ```
 
-![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](portMapping.png)
+![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](web/portMapping.png)
 
 주소창의 **`localhost:8080`** 과 커스텀 페이지(`🚀 Codyssey Docker 미션 성공!`)가 함께 보인다 → 매핑 및 커스텀 이미지 적용이 동시에 증명된다.
 
