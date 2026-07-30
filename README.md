@@ -296,10 +296,40 @@ drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 
 ```console
 $ docker --version
-(출력 붙여넣기)
+rhw02133670@c4r1s8 codyssey % docker --version
+Docker version 28.5.2, build ecc6942
 
 $ docker info
-(출력 붙여넣기 — Server 섹션까지 나오면 데몬 정상)
+rhw02133670@c4r1s8 codyssey % docker info
+Client:
+ Version:    28.5.2
+ Context:    orbstack
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.29.1
+    Path:     /Users/rhw02133670/.docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.40.3
+    Path:     /Users/rhw02133670/.docker/cli-plugins/docker-compose
+server:
+  Containers: 10
+    Running: 0
+    Paused: 0
+    Stopped: 10
+  Images: 6
+  Server Version: 28.5.2
+  Storage Driver: overlay2
+    Backing Filesystem: btrfs
+    Supports d_type: true
+    Using metacopy: false
+    Native Overlay Diff: true
+    userxattr: false
+  Logging Driver: json-file
+  Cgroup Driver: cgroupfs
+  Cgroup Version: 2
+
+
 ```
 
 > ⛔ **미기록 — 과제 §4 필수 항목.**
