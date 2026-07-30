@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+    web:
+      image: nginx:latest	
+      ports:
+        - "8080:80"
+    cache:
+      image: redis:latest
+
+    app:
+      image: alpine:latest
+      command: sh -c "echo 포트는 $$PORT, 모드는 $$MODE 입니다 && sleep infinity"
+      environment:
+        - PORT=5000
+        - MODE=development 
+
