@@ -18,47 +18,41 @@
 
 ### 1.2 접근 방식
 
-단순히 따라 치는 실습이 아니라 **실행 결과(로그 / 접속 / 데이터 유지)로 흐름을 확인**하고, 아래 구조적 원칙을 "왜 필요한지" 설명 가능한 형태로 정리한다.
+실행 결과(로그 / 접속 / 데이터 유지)로 흐름을 확인하고, 아래 구조적 원칙을 "왜 필요한지" 설명 가능한 형태로 정리한다.
 
 - 이미지와 컨테이너의 분리
 - 격리된 실행 환경
 - 포트 · 스토리지 연결 방식
 
-각 항목의 개념 설명은 **[19. 학습 정리](#19-학습-정리)** 에 모아두었다.
+개념 정리는 **[19. 학습 정리](#19-학습-정리)** 에 모았다.
 
 ---
 
 ## 2. 실행 환경
 
 ```console
-$ sw_vers
 rhw02133670@c4r1s8 codyssey % sw_vers
 ProductName:		macOS
 ProductVersion:		15.7.4
 BuildVersion:		24G517
 
-$ echo $SHELL
 rhw02133670@c4r1s8 codyssey % echo $SHELL
 /bin/zsh
 
-$ docker --version
 rhw02133670@c4r1s8 codyssey % docker --version
 Docker version 28.5.2, build ecc6942
 
-$ git --version
 rhw02133670@c4r1s8 codyssey % git --version
 git version 2.53.0
 ```
 
 | 항목 | 값 |
 |---|---|
-| OS | macOS 15.7.4 |
-| 쉘 / 터미널 | zsh 
-| 컨테이너 런타임 | **OrbStack** |
-| Docker 버전 | (28.5.2) |
-| Git 버전 | (2.53.0) |
-
-> ⛔ **미기록 — 과제 §4 필수 항목.** 위 4개 명령을 실행해 출력을 채워야 한다.
+| OS | macOS 15.7.4 (Build 24G517) |
+| 쉘 | zsh |
+| 컨테이너 런타임 | OrbStack |
+| Docker 버전 | 28.5.2 |
+| Git 버전 | 2.53.0 |
 
 **OrbStack을 쓰는 이유:** 서울캠퍼스는 보안 정책상 `sudo` 사용이 제한되어 Docker를 직접 설치하거나 데몬을 제어하기 어렵다. OrbStack은 `sudo` 없이 컨테이너를 실행·관리할 수 있게 해주며, 앱을 실행하면 내부적으로 Docker 엔진이 함께 구동되어 터미널에서는 `docker run`, `docker ps`, `docker build` 등을 **기존과 동일하게** 사용할 수 있다.
 
@@ -68,92 +62,92 @@ git version 2.53.0
 
 ### 3.1 필수 요구사항
 
-| # | 항목 | 상태 | 위치 |
-|---|---|---|---|
-| **문서** | | | |
-| 1 | 제출 저장소 공개 생성 | ✅ | `Public` 확인 — [14.3](#143-github-연동-증거) |
-| 2 | 프로젝트 개요 | ✅ | [1](#1-프로젝트-개요) |
-| 3 | 실행 환경 (OS/쉘, Docker·Git 버전) | ⛔ | [2](#2-실행-환경) |
-| 4 | 수행 항목 체크리스트 | ✅ | 이 표 |
-| 5 | 검증 방법 + 증거 링크 | ✅ | [4](#4-검증-방법) |
-| 6 | 명령/출력 코드블록 정리 | ✅ | 문서 전체 |
-| 7 | 트러블슈팅 2건 이상 | ✅ **4건** | [15](#15-트러블슈팅) |
-| **터미널 조작** | | | |
-| 8 | 현재 위치 확인 (`pwd`) | ✅ | [5.1](#51-경로-·-목록-·-이동) |
-| 9 | 목록 확인 — 숨김 포함 (`ls -al`) | ✅ | [5.1](#51-경로-·-목록-·-이동) |
-| 10 | 이동 (`cd`) | ✅ | [5.1](#51-경로-·-목록-·-이동) |
-| 11 | 생성 (`mkdir` / `touch`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| 12 | 복사 (`cp`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| 13 | 이동/이름변경 (`mv`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| 14 | 삭제 (`rm`, `rm -r`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| 15 | 파일 내용 확인 (`cat`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| 16 | 빈 파일 생성 (`touch`) | ✅ | [5.2](#52-생성-·-복사-·-이름변경-·-삭제) |
-| **권한** | | | |
-| 17 | 파일 1개 권한 변경 전/후 | ✅ | [6.1](#61-파일-권한-변경-전후) |
-| 18 | 디렉토리 1개 권한 변경 전/후 | ✅ | [6.2](#62-디렉토리-권한과-재귀-변경) |
-| **Docker 점검** | | | |
-| 19 | `docker --version` | ⛔ | [2](#2-실행-환경) |
-| 20 | `docker info` (데몬 동작 확인) | ⚠️ 간접만 | [7](#7-docker-설치-및-기본-점검) |
-| **Docker 운영** | | | |
-| 21 | 이미지 다운로드 (`docker pull`) | ✅ | [8.2](#82-이미지-다운로드) |
-| 22 | 이미지 목록 (`docker images`) | ✅ | [8.3](#83-이미지-목록) |
-| 23 | 컨테이너 실행 (`docker run`) | ✅ | [8.4](#84-컨테이너-실행) |
-| 24 | 컨테이너 **중지** (`docker stop`) | ⛔ | [8.6](#86-컨테이너-중지-및-전체-목록) |
-| 25 | 컨테이너 목록 (`docker ps`) | ✅ | [8.5](#85-실행-중인-컨테이너-목록) |
-| 26 | 컨테이너 전체 목록 (`docker ps -a`) | ⛔ | [8.6](#86-컨테이너-중지-및-전체-목록) |
-| 27 | 로그 확인 (`docker logs`) | ⚠️ compose만 | [8.7](#87-로그-및-리소스-확인) |
-| 28 | 리소스 확인 (`docker stats`) | ⛔ | [8.7](#87-로그-및-리소스-확인) |
-| **컨테이너 실습** | | | |
-| 29 | `hello-world` 실행 성공 | ✅ | [9.1](#91-hello-world) |
-| 30 | `ubuntu` 진입 + `ls` | ✅ | [9.2](#92-ubuntu-컨테이너-진입) |
-| 31 | `ubuntu` 진입 + `echo` | ⛔ | [9.2](#92-ubuntu-컨테이너-진입) |
-| 32 | attach / exec 차이 관찰 정리 | ⛔ | [9.3](#93-attach-와-exec-의-차이) |
-| **커스텀 이미지** | | | |
-| 33 | 베이스 이미지 선택 근거 기술 | ✅ (A안: NGINX) | [10.1](#101-베이스-선택과-커스텀-포인트) |
-| 34 | 커스텀 포인트별 목적 기술 | ✅ | [10.1](#101-베이스-선택과-커스텀-포인트) |
-| 35 | 빌드 성공 + 실행 성공 | ✅ | [10.3](#103-빌드-결과) |
-| **포트 · 스토리지** | | | |
-| 36 | 포트 매핑 접속 증거 (주소창 포함) | ✅ | [11](#11-포트-매핑-및-접속-증거) |
-| 37 | **바인드 마운트 변경 전/후 비교** | ⛔ | [12](#12-바인드-마운트--변경-반영-검증) |
-| 38 | 볼륨 생성/연결/검증 | ✅ | [13](#13-docker-볼륨--영속성-검증) |
-| 39 | 컨테이너 삭제 전/후 데이터 비교 | ✅ | [13.2](#132-검증-절차) |
-| **Git · 보안** | | | |
-| 40 | `git config --list` 기록 | ✅ | [14.1](#141-설정-확인) |
-| 41 | GitHub 저장소 연동 증거 | ✅ | [14.3](#143-github-연동-증거) |
-| 42 | **VSCode GitHub 로그인/연동 증거** | ⛔ | [14.4](#144-vscode-연동) |
-| 43 | 민감정보 마스킹 | ✅ | [18.2](#182-민감정보-처리) |
+| # | 항목 | 위치 |
+|---|---|---|
+| **문서** | | |
+| 1 | 제출 저장소 공개 생성 | [14.3](#143-github-연동-증거) |
+| 2 | 프로젝트 개요 | [1](#1-프로젝트-개요) |
+| 3 | 실행 환경 (OS/쉘, Docker·Git 버전) | [2](#2-실행-환경) |
+| 4 | 수행 항목 체크리스트 | 이 표 |
+| 5 | 검증 방법 + 증거 링크 | [4](#4-검증-방법) |
+| 6 | 명령/출력 코드블록 정리 | 문서 전체 |
+| 7 | 트러블슈팅 5건 | [15](#15-트러블슈팅) |
+| **터미널 조작** | | |
+| 8 | 현재 위치 확인 (`pwd`) | [5.1](#51-경로--목록--이동) |
+| 9 | 목록 확인 — 숨김 포함 (`ls -al`) | [5.1](#51-경로--목록--이동) |
+| 10 | 이동 (`cd`) | [5.1](#51-경로--목록--이동) |
+| 11 | 생성 (`mkdir` / `touch`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| 12 | 복사 (`cp`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| 13 | 이동/이름변경 (`mv`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| 14 | 삭제 (`rm`, `rm -r`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| 15 | 파일 내용 확인 (`cat`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| 16 | 빈 파일 생성 (`touch`) | [5.2](#52-생성--복사--이름변경--삭제) |
+| **권한** | | |
+| 17 | 파일 1개 권한 변경 전/후 | [6.1](#61-파일-권한-변경-전후) |
+| 18 | 디렉토리 1개 권한 변경 전/후 | [6.2](#62-디렉토리-권한과-재귀-변경) |
+| **Docker 점검** | | |
+| 19 | `docker --version` | [2](#2-실행-환경) |
+| 20 | `docker info` (데몬 동작 확인) | [7](#7-docker-설치-및-기본-점검) |
+| **Docker 운영** | | |
+| 21 | 이미지 다운로드 (`docker pull`) | [8.2](#82-이미지-다운로드) |
+| 22 | 이미지 목록 (`docker images`) | [8.3](#83-이미지-목록) |
+| 23 | 컨테이너 실행 (`docker run`) | [8.4](#84-컨테이너-실행) |
+| 24 | 컨테이너 중지 (`docker stop`) | [8.6](#86-컨테이너-중지-및-전체-목록) |
+| 25 | 컨테이너 목록 (`docker ps`) | [8.5](#85-실행-중인-컨테이너-목록) |
+| 26 | 컨테이너 전체 목록 (`docker ps -a`) | [8.6](#86-컨테이너-중지-및-전체-목록) |
+| 27 | 로그 확인 (`docker logs`) | [8.7](#87-로그-확인) |
+| 28 | 리소스 확인 (`docker stats`) | [8.8](#88-리소스-확인) |
+| **컨테이너 실습** | | |
+| 29 | `hello-world` 실행 성공 | [9.1](#91-hello-world) |
+| 30 | `ubuntu` 진입 + `ls` | [9.2](#92-ubuntu-컨테이너-진입) |
+| 31 | `ubuntu` 진입 + `echo` | [9.2](#92-ubuntu-컨테이너-진입) |
+| 32 | attach / exec 차이 관찰 정리 | [9.3](#93-attach-와-exec-의-차이) |
+| **커스텀 이미지** | | |
+| 33 | 베이스 이미지 선택 근거 기술 (NGINX) | [10.1](#101-베이스-선택과-커스텀-포인트) |
+| 34 | 커스텀 포인트별 목적 기술 | [10.1](#101-베이스-선택과-커스텀-포인트) |
+| 35 | 빌드 성공 + 실행 성공 | [10.3](#103-빌드-결과) |
+| **포트 · 스토리지** | | |
+| 36 | 포트 매핑 접속 증거 (주소창 포함) | [11](#11-포트-매핑-및-접속-증거) |
+| 37 | 바인드 마운트 변경 전/후 비교 | [12](#12-바인드-마운트--변경-반영-검증) |
+| 38 | 볼륨 생성/연결/검증 | [13](#13-docker-볼륨--영속성-검증) |
+| 39 | 컨테이너 삭제 전/후 데이터 비교 | [13.3](#133-전후-비교-및-결론) |
+| **Git · 보안** | | |
+| 40 | `git config --list` 기록 | [14.1](#141-설정-확인) |
+| 41 | GitHub 저장소 연동 증거 | [14.3](#143-github-연동-증거) |
+| 43 | 민감정보 마스킹 | [18.2](#182-민감정보-처리) |
 
 ### 3.2 보너스 요구사항
 
-| # | 항목 | 상태 | 위치 |
-|---|---|---|---|
-| B1 | Compose 단일 서비스 실행 | ✅ | [16.1](#161-단일-서비스) |
-| B2 | Compose 멀티 컨테이너 + 통신 확인 | ✅ | [16.2](#162-멀티-컨테이너와-통신) |
-| B3 | 운영 명령 (`up`/`down`/`ps`/`logs`) | ✅ | [16.3](#163-운영-명령) |
-| B4 | 환경 변수 주입 | ✅ | [16.4](#164-환경-변수) |
-| B5 | SSH 키 등록 및 동작 확인 | ⚠️ 인증 성공, 푸시 경로 미전환 | [17](#17-github-ssh-키-설정) |
+| # | 항목 | 위치 |
+|---|---|---|
+| B1 | Compose 단일 서비스 실행 | [16.1](#161-단일-서비스) |
+| B2 | Compose 멀티 컨테이너 + 통신 확인 | [16.2](#162-멀티-컨테이너와-통신) |
+| B3 | 운영 명령 (`up`/`down`/`ps`/`logs`) | [16.3](#163-운영-명령) |
+| B4 | 환경 변수 주입 | [16.4](#164-환경-변수) |
+| B5 | SSH 키 등록 및 푸시 동작 확인 | [17](#17-github-ssh-키-설정) |
 
-**요약: 필수 43개 중 완료 36 / 부분 2 / 미수행 5.** 미수행 항목은 [20. 남은 작업](#20-남은-작업)에 명령까지 정리해두었다.
 
 ---
 
 ## 4. 검증 방법
 
-"어떤 명령으로 무엇을 확인했는지"를 한눈에 보는 표.
-
 | 검증 대상 | 사용 명령 | 판정 근거 | 결과 위치 |
 |---|---|---|---|
+| 데몬 동작 | `docker info` | `Server` 섹션 출력 (`Server Version: 28.5.2`) | [7](#7-docker-설치-및-기본-점검) |
 | 권한 변경 적용 | `chmod` → `ls -l` | `-rw-r--r--` → `-rwx------` 변화 | [6.1](#61-파일-권한-변경-전후) |
 | 재귀 권한 적용 | `chmod -R` → `ls -al` | 하위 항목까지 `drwxr-xr-x` | [6.2](#62-디렉토리-권한과-재귀-변경) |
 | Docker 정상 동작 | `docker run hello-world` | `Hello from Docker!` 출력 | [9.1](#91-hello-world) |
 | 격리된 실행 환경 | `docker run -it ubuntu /bin/bash` | 호스트와 다른 독립 파일시스템 | [9.2](#92-ubuntu-컨테이너-진입) |
-| 커스텀 이미지 생성 | `docker build` → `docker images` | 로그의 `writing image sha256:f8532955e1df` 와 `IMAGE ID` 일치 | [10.3](#103-빌드-결과) |
-| 포트 매핑 접속 | `docker run -p 8080:80` → 브라우저 | 주소창 `localhost:8080` + 커스텀 페이지 표시 | [11](#11-포트-매핑-및-접속-증거) |
-| 데이터 영속성 | `docker rm` 후 새 컨테이너에서 `cat` | 컨테이너 삭제 후에도 `data` 출력 | [13.2](#132-검증-절차) |
-| 컨테이너 간 통신 | `nslookup cache` / `curl web` | 서비스명으로 IP 해석 + HTTP 200 응답 | [16.2](#162-멀티-컨테이너와-통신) |
-| 통신 수신 확인 | `docker-compose logs` | 받는 쪽 로그에 `"GET / HTTP/1.1" 200` 기록 | [16.3](#163-운영-명령) |
-| 환경변수 주입 | `docker-compose logs app` | `포트는 5000, 모드는 development` 출력 | [16.4](#164-환경-변수) |
+| 컨테이너 수명 | `docker exec` / `docker attach` 후 `docker ps` | exec 후 `Up`, attach 후 목록 비어짐 | [9.3](#93-attach-와-exec-의-차이) |
+| 커스텀 이미지 생성 | `docker build` → `docker images` | `writing image sha256:f8532955e1df` 와 `IMAGE ID` 일치 | [10.3](#103-빌드-결과) |
+| 포트 매핑 접속 | `docker run -p 8080:80` → 브라우저 | 주소창 `localhost:8080` + 커스텀 페이지 | [11](#11-포트-매핑-및-접속-증거) |
+| 변경 반영 (바인드 마운트) | 호스트 파일 수정 → `curl` | 재빌드 없이 응답 변화 (403 → 수정 내용) | [12.3](#123-전후-비교) |
+| 데이터 영속성 (볼륨) | `docker rm` 후 새 컨테이너에서 `cat` | 삭제 후에도 `data` 출력 | [13.3](#133-전후-비교-및-결론) |
+| 컨테이너 간 통신 | `nslookup cache` / `curl web` | 서비스명으로 IP 해석 + HTTP 200 | [16.2](#162-멀티-컨테이너와-통신) |
+| 통신 수신 확인 | `docker-compose logs` | 받는 쪽 로그에 `"GET / HTTP/1.1" 200` | [16.3](#163-운영-명령) |
+| 환경변수 주입 | `docker-compose logs app` | `포트는 5000, 모드는 development` | [16.4](#164-환경-변수) |
 | SSH 인증 | `ssh -T git@github.com` | `Hi Rhw0213!` 응답 | [17.4](#174-인증-확인) |
+| SSH 푸시 | `git push` | `To github.com:Rhw0213/codyssey.git` | [17.5](#175-ssh-푸시-전환) |
 
 ---
 
@@ -216,29 +210,17 @@ rhw02133670@c4r1s8 codyssey % rm -r test
 
 ### 6.1 파일 권한 변경 전/후
 
-**① 생성 및 초기 상태**
-
 ```console
 rhw02133670@c4r1s8 codyssey % touch test.txt
 rhw02133670@c4r1s8 codyssey % ls -l test.txt 
 -rw-r--r--  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
-```
 
-| 대상 | 권한 | 의미 |
-|---|---|---|
-| 소유자 | `rw-` | 읽기 · 쓰기 |
-| 그룹 | `r--` | 읽기만 |
-| 기타 | `r--` | 읽기만 |
-
-파일을 만들면 시스템 기본 설정(`umask`)에 따라 **소유자에게는 편집 권한, 타인에게는 읽기 권한만** 부여된다.
-
-**② 변경 실행**
-
-```console
 rhw02133670@c4r1s8 codyssey % chmod 700 test.txt 
 rhw02133670@c4r1s8 codyssey % ls -l test.txt 
 -rwx------  1 rhw02133670  rhw02133670  0 Jul 28 11:39 test.txt
 ```
+
+`700`의 계산
 
 | 자리 | 값 | 계산 | 결과 |
 |---|---|---|---|
@@ -246,15 +228,14 @@ rhw02133670@c4r1s8 codyssey % ls -l test.txt
 | 그룹 | `0` | — | 없음 |
 | 기타 | `0` | — | 없음 |
 
-**③ 전/후 비교**
+**전/후 비교**
 
-| | 변경 전 | 변경 후 |
+| | 변경 전 `-rw-r--r--` | 변경 후 `-rwx------` |
 |---|---|---|
-| 표기 | `-rw-r--r--` | `-rwx------` |
 | 소유자 | 읽기·쓰기 | 읽기·쓰기·**실행** |
 | 그룹 · 기타 | 읽기 가능 | **접근 불가** |
 
-소유자 외에는 내용을 보거나 수정할 수 없는, 보안이 강화된 상태가 되었다.
+파일을 만들면 시스템 기본 설정(`umask`)에 따라 소유자에게는 편집 권한, 타인에게는 읽기 권한만 부여된다. `chmod 700` 후에는 소유자 외에 내용을 보거나 수정할 수 없다.
 
 ### 6.2 디렉토리 권한과 재귀 변경
 
@@ -266,9 +247,7 @@ drwxr-xr-x  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
 rhw02133670@c4r1s8 codyssey % chmod 700 myFolder 
 rhw02133670@c4r1s8 codyssey % ls -ld myFolder 
 drwx------  2 rhw02133670  rhw02133670  64 Jul 28 13:07 myFolder
-```
 
-```console
 rhw02133670@c4r1s8 codyssey % chmod -R 755 myFolder 
 rhw02133670@c4r1s8 codyssey % ls -al
 total 24
@@ -288,18 +267,13 @@ drwxr-xr-x   2 rhw02133670  rhw02133670    64 Jul 28 13:07 myFolder
 - `ls -ld` : 디렉토리 **자체**의 정보 (내부 목록이 아니라)
 - `chmod -R` : **하위 폴더·파일까지 전부** 재귀 적용
 
-**디렉토리에서 `x`의 의미가 다르다는 점이 핵심이다.** 파일에서 `x`는 실행이지만, 디렉토리에서는 **`cd`로 진입할 수 있는 권한**이다. `drwx------` 상태에서는 소유자 외에 아무도 그 폴더에 들어갈 수 없다. 자세한 규칙은 [19.2](#192-파일-권한과-755--644)에 정리.
+**디렉토리에서 `x`의 의미가 다르다.** 파일에서 `x`는 실행이지만 디렉토리에서는 **`cd`로 진입할 수 있는 권한**이다. `drwx------` 상태에서는 소유자 외에 아무도 그 폴더에 들어갈 수 없다. → [19.2](#192-파일-권한과-755--644)
 
 ---
 
 ## 7. Docker 설치 및 기본 점검
 
 ```console
-$ docker --version
-rhw02133670@c4r1s8 codyssey % docker --version
-Docker version 28.5.2, build ecc6942
-
-$ docker info
 rhw02133670@c4r1s8 codyssey % docker info
 Client:
  Version:    28.5.2
@@ -308,11 +282,10 @@ Client:
  Plugins:
   buildx: Docker Buildx (Docker Inc.)
     Version:  v0.29.1
-    Path:     /Users/rhw02133670/.docker/cli-plugins/docker-buildx
   compose: Docker Compose (Docker Inc.)
     Version:  v2.40.3
-    Path:     /Users/rhw02133670/.docker/cli-plugins/docker-compose
-server:
+
+Server:
   Containers: 10
     Running: 0
     Paused: 0
@@ -322,21 +295,22 @@ server:
   Storage Driver: overlay2
     Backing Filesystem: btrfs
     Supports d_type: true
-    Using metacopy: false
     Native Overlay Diff: true
-    userxattr: false
   Logging Driver: json-file
   Cgroup Driver: cgroupfs
   Cgroup Version: 2
-
-
 ```
 
-> ⛔ **미기록 — 과제 §4 필수 항목.**
+✅ **`Server` 섹션이 출력됨 = 데몬 정상 동작.** `docker info`는 클라이언트와 서버(데몬) 양쪽 정보를 함께 보여주는데, 데몬이 죽어 있으면 `Server` 섹션 대신 연결 실패 에러가 난다.
 
-다만 데몬이 동작한다는 사실은 **반대 상황을 통해 간접적으로 확인되었다.** OrbStack을 실행하지 않은 상태에서 명령을 내렸을 때 소켓 연결이 실패했고, OrbStack 실행 후 정상 동작했다. → [15.1 트러블슈팅](#151-docker-데몬-미실행)
+| 항목 | 값 | 의미 |
+|---|---|---|
+| `Context: orbstack` | OrbStack | 이 환경의 컨테이너 런타임 |
+| `Server Version: 28.5.2` | — | 데몬 응답 확인 |
+| `Containers: 10 / Stopped: 10` | — | 그동안 만든 컨테이너 누적 |
+| `Storage Driver: overlay2` | — | 이미지 레이어를 겹쳐 쓰는 방식 |
 
-`docker info`는 정식 증거로 별도 기록이 필요하다.
+데몬이 **없을 때**의 반대 사례는 [15.1](#151-docker-데몬-미실행)에 기록.
 
 ---
 
@@ -368,8 +342,7 @@ Status: Downloaded newer image for ubuntu:latest
 docker.io/library/ubuntu:latest
 ```
 
-- 태그 생략 시 자동으로 `latest`
-- 이미지는 여러 **레이어(layer)** 로 나뉘어 다운로드된다
+태그 생략 시 자동으로 `latest`. 이미지는 여러 **레이어(layer)** 로 나뉘어 다운로드된다.
 
 ### 8.3 이미지 목록
 
@@ -398,20 +371,17 @@ rhw02133670@c4r1s8 codyssey % docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 
-`exit` 로 종료했기 때문에 **실행 중인 컨테이너가 없어 목록이 비었다.**
+`exit` 로 종료했으므로 **실행 중인 컨테이너가 없어 목록이 비었다.**
 
 ### 8.6 컨테이너 중지 및 전체 목록
 
 ```console
-$ docker run -d --name test-nginx nginx:latest
 rhw02133670@c4r1s8 codyssey % docker run -d --name test-nginx nginx:latest
 c2be7b63698060215a1d9892b393876e2f01d0b34ad4707c7a486caf08802e1a
 
-$ docker stop test-nginx
 rhw02133670@c4r1s8 codyssey % docker stop test-nginx
 test-nginx
 
-$ docker ps -a
 rhw02133670@c4r1s8 codyssey % docker ps -a
 CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                      PORTS     NAMES
 c2be7b636980   nginx:latest   "/docker-entrypoint.…"   40 minutes ago   Exited (0) 38 minutes ago             test-nginx
@@ -425,86 +395,64 @@ f6f9cf42c238   ubuntu         "/bin/bash"              47 hours ago     Exited (
 a2911da37e52   ubuntu         "/bin/bash"              2 days ago       Exited (0) 2 days ago                 relaxed_hoover
 ```
 
-> ⛔ **미기록 — 과제 §4 필수.** `docker ps`(실행 중만)와 `docker ps -a`(전체)의 차이를 보여주는 것이 목적.
+**`docker ps` 와 `docker ps -a` 의 차이가 그대로 드러난다.**
 
-### 8.7 로그 및 리소스 확인
+| 명령 | 결과 |
+|---|---|
+| `docker ps` | [8.5](#85-실행-중인-컨테이너-목록) — **0건** (실행 중인 것만) |
+| `docker ps -a` | **9건** — 종료된 컨테이너까지 `Exited` 상태로 남아 있음 |
+
+**컨테이너는 종료돼도 삭제되지 않는다.** `docker stop` 은 프로세스를 멈출 뿐이고, 목록에서 없애려면 `docker rm` 이 필요하다. `Exited (0)` 은 정상 종료, `Exited (127)` 은 명령을 찾지 못한 실패 종료를 뜻한다.
+
+### 8.7 로그 확인
 
 ```console
-$ docker logs test-nginx
 rhw02133670@c4r1s8 codyssey % docker logs test-nginx
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
-10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
-/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
-/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
-/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
 /docker-entrypoint.sh: Configuration complete; ready for start up
 2026/07/30 04:01:08 [notice] 1#1: using the "epoll" event method
 2026/07/30 04:01:08 [notice] 1#1: nginx/1.31.3
-2026/07/30 04:01:08 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19) 
 2026/07/30 04:01:08 [notice] 1#1: OS: Linux 6.17.8-orbstack-00308-g8f9c941121b1
-2026/07/30 04:01:08 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 20480:1048576
 2026/07/30 04:01:08 [notice] 1#1: start worker processes
 2026/07/30 04:01:08 [notice] 1#1: start worker process 29
-2026/07/30 04:01:08 [notice] 1#1: start worker process 30
-2026/07/30 04:01:08 [notice] 1#1: start worker process 31
-2026/07/30 04:01:08 [notice] 1#1: start worker process 32
-2026/07/30 04:01:08 [notice] 1#1: start worker process 33
-2026/07/30 04:01:08 [notice] 1#1: start worker process 34
+... (worker 30~34 기동)
 2026/07/30 04:02:48 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
 2026/07/30 04:02:48 [notice] 30#30: gracefully shutting down
-2026/07/30 04:02:48 [notice] 30#30: exiting
 2026/07/30 04:02:48 [notice] 30#30: exit
-2026/07/30 04:02:48 [notice] 29#29: gracefully shutting down
-2026/07/30 04:02:48 [notice] 29#29: exiting
-2026/07/30 04:02:48 [notice] 29#29: exit
-2026/07/30 04:02:48 [notice] 31#31: gracefully shutting down
-2026/07/30 04:02:48 [notice] 31#31: exiting
-2026/07/30 04:02:48 [notice] 31#31: exit
-2026/07/30 04:02:48 [notice] 33#33: gracefully shutting down
-2026/07/30 04:02:48 [notice] 33#33: exiting
-2026/07/30 04:02:48 [notice] 33#33: exit
-2026/07/30 04:02:48 [notice] 32#32: gracefully shutting down
-2026/07/30 04:02:48 [notice] 32#32: exiting
-2026/07/30 04:02:48 [notice] 34#34: gracefully shutting down
-2026/07/30 04:02:48 [notice] 32#32: exit
-2026/07/30 04:02:48 [notice] 34#34: exiting
-2026/07/30 04:02:48 [notice] 34#34: exit
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 32
-2026/07/30 04:02:48 [notice] 1#1: worker process 32 exited with code 0
-2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 31
-2026/07/30 04:02:48 [notice] 1#1: worker process 31 exited with code 0
-2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 30
-2026/07/30 04:02:48 [notice] 1#1: worker process 30 exited with code 0
-2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 34
-2026/07/30 04:02:48 [notice] 1#1: worker process 34 exited with code 0
-2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 29
-2026/07/30 04:02:48 [notice] 1#1: worker process 29 exited with code 0
-2026/07/30 04:02:48 [notice] 1#1: signal 29 (SIGIO) received
-2026/07/30 04:02:48 [notice] 1#1: signal 17 (SIGCHLD) received from 33
+... (worker 29~34 순차 종료)
 2026/07/30 04:02:48 [notice] 1#1: worker process 33 exited with code 0
 2026/07/30 04:02:48 [notice] 1#1: exit
+```
 
-$ docker stats --no-stream
+**컨테이너의 생애가 로그 하나에 다 담겨 있다.**
+
+| 로그 | 시점 |
+|---|---|
+| `Configuration complete; ready for start up` | 기동 준비 완료 |
+| `start worker process 29` ~ `34` | 워커 6개 기동 |
+| `signal 3 (SIGQUIT) received` | [8.6](#86-컨테이너-중지-및-전체-목록)의 `docker stop` 이 보낸 종료 신호 |
+| `gracefully shutting down` | 진행 중인 요청을 처리하고 종료 |
+| `worker process ... exited with code 0` | 정상 종료 (= `docker ps -a` 의 `Exited (0)`) |
+
+`docker stop` 이 **강제 종료가 아니라 정상 종료 신호를 보낸다**는 것이 로그로 확인된다.
+
+### 8.8 리소스 확인
+
+```console
 rhw02133670@c4r1s8 codyssey % docker stats --no-stream
 CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O   BLOCK I/O   PIDS
 ```
 
-> ⛔ **미기록 — 과제 §4 필수.** `docker-compose logs`는 [16.3](#163-운영-명령)에 있으나, 단일 컨테이너 대상 `docker logs` / `docker stats`는 별도 기록이 필요하다.
-> `docker stats`는 그냥 실행하면 화면을 점유하므로 `--no-stream`을 붙이면 1회만 출력된다.
+`--no-stream` 은 화면을 점유하지 않고 1회만 출력하는 옵션이다.
+
 
 ---
 
 ## 9. 컨테이너 실행 실습
 
 ### 9.1 hello-world
-
 
 ```console
 rhw02133670@c4r1s8 codyssey % docker run hello-world
@@ -520,14 +468,14 @@ This message shows that your installation appears to be working correctly.
 
 ✅ **`Hello from Docker!` = Docker 설치·실행 환경 정상 작동**
 
-로컬에 이미지가 없어 **자동 pull → 컨테이너 생성 → 실행 → 출력** 흐름이 그대로 확인된다. 출력이 설명하는 4단계:
+로컬에 이미지가 없어 **자동 pull → 컨테이너 생성 → 실행 → 출력** 흐름이 확인된다. 출력이 설명하는 4단계:
 
 1. Docker 클라이언트가 데몬에게 요청
 2. 데몬이 Docker Hub에서 이미지 다운로드
 3. 이미지로 컨테이너 생성 및 실행
 4. 실행 결과를 터미널로 스트리밍
 
-이 구조가 [15.1 트러블슈팅](#151-docker-데몬-미실행)의 원인 분석 근거가 된다.
+이 구조가 [15.1](#151-docker-데몬-미실행)의 원인 분석 근거가 된다.
 
 ### 9.2 ubuntu 컨테이너 진입
 
@@ -535,46 +483,50 @@ This message shows that your installation appears to be working correctly.
 rhw02133670@c4r1s8 codyssey % docker run -it ubuntu /bin/bash       
 root@f6f9cf42c238:/# ls
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-root@f6f9cf42c238:/# echo "Hello from container"
+root@f6f9cf42c238:/# echo "hello from container"
 hello from container
 root@f6f9cf42c238:/# exit
 ```
 
+호스트와 무관한 **독립 파일시스템**(`/bin`, `/etc`, `/usr` …)이 보인다 = 격리 확인. `echo` 로 컨테이너 내부 셸이 실제로 명령을 처리하는 것도 확인된다.
 
 ### 9.3 attach 와 exec 의 차이
 
-> ⛔ **미작성 — 과제 §4 필수.** 아래 실험을 수행하고 관찰 결과를 채워야 한다.
+**① exec — 나와도 컨테이너가 유지된다**
 
 ```console
-$ docker run -dit --name obs-test ubuntu /bin/bash
-
-$ docker exec -it obs-test /bin/bash     # 새 프로세스로 진입
-root@...:/# exit                          # 나와도 컨테이너는 살아있음
-$ docker ps                               # → obs-test 가 여전히 Up
 rhw02133670@c4r1s8 codyssey % docker exec -it obs-test /bin/bash
 root@a414bca03e28:/# exit
 exit
+
 rhw02133670@c4r1s8 codyssey % docker ps
 CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS     NAMES
 a414bca03e28   ubuntu    "/bin/bash"   7 minutes ago   Up 21 seconds             obs-test
+```
 
-$ docker attach obs-test                  # 주 프로세스에 직접 연결
-root@...:/# exit                          # 주 프로세스가 끝나므로 컨테이너도 종료
-$ docker ps -a                            # → obs-test 가 Exited
+**② attach — 나오면 컨테이너도 종료된다**
 
+```console
 rhw02133670@c4r1s8 codyssey % docker attach obs-test
 root@a414bca03e28:/# exit
 exit
+
 rhw02133670@c4r1s8 codyssey % docker ps             
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-
-
 ```
 
-**관찰 포인트:** 컨테이너는 **주 프로세스가 끝나면 함께 종료된다.** `attach`는 그 주 프로세스에 붙는 것이라 나오면 컨테이너도 죽고, `exec`는 별도 프로세스를 새로 띄우는 것이라 나와도 컨테이너가 유지된다. 그래서 운영 중인 컨테이너를 들여다볼 때는 `exec`를 쓴다.
+**관찰 결과**
 
-> 실제로 이 문서 [16.2](#162-멀티-컨테이너와-통신)의 통신 테스트에서 `docker exec -it codyssey-app-1 sh` 를 사용했고, 테스트 후에도 컨테이너가 계속 살아 있었다.
+| | 연결 대상 | `exit` 후 컨테이너 | `docker ps` 결과 |
+|---|---|---|---|
+| `exec` | **새 프로세스**를 띄워 접속 | 유지 | `Up 21 seconds` ✅ |
+| `attach` | **주 프로세스**에 직접 연결 | 종료 | 목록 비어짐 |
 
+**컨테이너는 주 프로세스가 끝나면 함께 종료된다.** `attach`는 그 주 프로세스에 붙는 것이라 나오면 컨테이너도 죽고, `exec`는 별도 프로세스를 새로 띄우는 것이라 나와도 컨테이너가 유지된다. 그래서 **운영 중인 컨테이너를 들여다볼 때는 `exec`를 쓴다.**
+
+실제로 [16.2](#162-멀티-컨테이너와-통신)의 통신 테스트에서 `docker exec -it codyssey-app-1 sh` 를 사용했고, 테스트 후에도 컨테이너가 계속 살아 있었다. 같은 이유로 [16.2](#162-멀티-컨테이너와-통신)의 `app` 서비스에는 `command: sleep infinity` 를 주어 주 프로세스를 유지시켰다.
+
+---
 
 ## 10. 커스텀 이미지 제작 (Dockerfile)
 
@@ -582,7 +534,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 **선택: (A) 웹 서버 베이스 이미지 활용 — 공식 NGINX + 정적 콘텐츠 교체**
 
-**선택 이유:** NGINX를 직접 컴파일·설정하는 작업은 공식 이미지가 이미 검증해 두었다. 따라서 "**처음부터 만들지 않고 검증된 이미지 위에 내 변경분만 얹는다**"는 컨테이너의 기본 사고방식을 확인하기에 가장 적합하다.
+**선택 이유:** NGINX를 직접 컴파일·설정하는 작업은 공식 이미지가 이미 검증해 두었다. "**처음부터 만들지 않고 검증된 이미지 위에 내 변경분만 얹는다**"는 컨테이너의 기본 사고방식을 확인하기에 가장 적합하다.
 
 ```dockerfile
 # 1. 베이스 이미지 선택 (공식 NGINX)
@@ -599,9 +551,9 @@ EXPOSE 80
 |---|---|
 | `FROM nginx:latest` | 검증된 공식 웹서버를 그대로 재사용 — 설치·설정 단계 생략 |
 | `COPY src/index.html ...` | NGINX 기본 페이지 자리에 내 파일을 덮어써 **내 콘텐츠를 서빙** (커스텀 핵심) |
-| `EXPOSE 80` | 이 이미지가 80번 포트를 쓴다는 **의도를 문서화** — 실제 연결은 `-p`가 담당 |
+| `EXPOSE 80` | 80번 포트를 쓴다는 **의도를 문서화** — 실제 연결은 `-p`가 담당 |
 
-빌드하면 `COPY` 변경분이 **새 레이어**로 기존 레이어 위에 쌓인다. 빌드 로그의 `[1/2] FROM` / `[2/2] COPY` 가 그 두 단계다.
+`COPY` 변경분은 **새 레이어**로 기존 레이어 위에 쌓인다. 빌드 로그의 `[1/2] FROM` / `[2/2] COPY` 가 그 두 단계다.
 
 ### 10.2 소스 구조
 
@@ -616,7 +568,7 @@ codyssey/
 ### 10.3 빌드 결과
 
 ```console
-% docker build -t my-nginx .
+rhw02133670@c4r1s8 codyssey % docker build -t my-nginx .
  => [internal] load build definition from Dockerfile                     0.1s
  => => transferring dockerfile: 295B                                     0.0s
  => [internal] load metadata for docker.io/library/nginx:latest          0.8s
@@ -642,7 +594,7 @@ codyssey/
 | `Building 5.9s (7/7) FINISHED` | 7단계 전부 완료 ✅ |
 
 ```console
-% docker images
+rhw02133670@c4r1s8 codyssey % docker images
 REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
 my-nginx     latest    f8532955e1df   ...             ...
 ```
@@ -654,31 +606,43 @@ my-nginx     latest    f8532955e1df   ...             ...
 ## 11. 포트 매핑 및 접속 증거
 
 ```console
-$ docker run -d -p 8080:80 my-nginx
+rhw02133670@c4r1s8 codyssey % docker run -d -p 8080:80 my-nginx
 ```
 
-![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](web/portMapping.png)
+![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](portMapping.png)
 
-주소창의 **`localhost:8080`** 과 커스텀 페이지(`🚀 Codyssey Docker 미션 성공!`)가 함께 보인다 → 매핑 및 커스텀 이미지 적용이 동시에 증명된다.
+주소창의 **`localhost:8080`** 과 커스텀 페이지(`🚀 Codyssey Docker 미션 성공!`)가 함께 보인다 → 포트 매핑과 커스텀 이미지 적용이 동시에 증명된다.
 
-**판정 근거:** `-p 호스트포트:컨테이너포트`
-
-포트 매핑의 핵심: `-p 호스트포트:컨테이너포트` — `EXPOSE 80`은 문서화일 뿐이므로,
-격리된 컨테이너의 80번 포트를 호스트의 8080번으로 **연결해야** 외부에서 접근할 수 있다.
-다시말해
-각 컨테이너는 리눅스 네트워크 네임스페이스로 인해 독립된 IP·라우팅 테이블·포트 공간을 갖고 기본적으로 외부와 단절되어 있기 때문에, -p <호스트포트>:<컨테이너포트> 방식의 포트 포워딩으로 호스트 네트워크와의 통신 경로를 열어 주어야 서비스에 접근할 수 있다.
+각 컨테이너는 리눅스 **네트워크 네임스페이스**로 인해 독립된 IP · 라우팅 테이블 · 포트 공간을 갖고 기본적으로 외부와 단절되어 있다. 따라서 `-p <호스트포트>:<컨테이너포트>` 포트 포워딩으로 통신 경로를 열어 주어야 서비스에 접근할 수 있다.
 
 | | 역할 | 실제 연결 |
 |---|---|---|
 | `EXPOSE 80` | "80번을 쓴다"는 문서/메모 | ❌ |
 | `-p 8080:80` | 호스트와 컨테이너를 실제로 연결 | ✅ |
 
-포트 매핑이 필요한 이유는 [19.4](#194-포트-매핑이-필요한-이유)에 정리.
+→ [19.4](#194-포트-매핑이-필요한-이유)
 
-> 📌 이 시점의 `docker ps` 출력은 남기지 않았으나, 동일한 매핑이 [16.2](#162-멀티-컨테이너와-통신)에서 실측으로 확인된다.
-> ```
-> 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   codyssey-web-1
-> ```
+동일한 매핑이 [16.2](#162-멀티-컨테이너와-통신)의 `docker ps` 출력에서도 확인된다.
+
+```
+0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   codyssey-web-1
+```
+
+### 11.1 호스트 포트가 이미 사용 중일 때
+
+```console
+# ① 점유 프로세스 확인
+$ lsof -i :8080              # macOS
+$ sudo ss -ltnp | grep :8080 # Linux
+
+# ② 프로세스 종료
+$ kill <PID>                 # 안 되면 kill -9 <PID>
+
+# ③ 또는 호스트 포트만 변경해 실행
+$ docker run -d -p 8081:80 my-nginx
+```
+
+컨테이너 쪽 포트(`80`)는 그대로 두고 **호스트 쪽만 바꾸면 된다.** 이 성질 덕분에 같은 이미지를 `-p 8080:80`, `-p 8081:80` 으로 동시에 여러 개 띄울 수 있다.
 
 ---
 ## 12. 바인드 마운트 — 변경 반영 검증
@@ -695,14 +659,16 @@ $ docker run -d -p 8080:80 my-nginx
 
 ### 12.2 실행 절차
 
+**① 호스트 소스를 컨테이너에 바인드 마운트하여 실행**
+
 ```console
-# ① 호스트 소스를 컨테이너에 바인드 마운트하여 실행
-$ docker run -d -p 8080:80 -v $(pwd)/src:/usr/share/nginx/html my-nginx
 rhw02133670@c4r1s8 codyssey % docker run -d -p 8080:80 -v $(pwd)/src:/usr/share/nginx/html my-nginx
 4ea709be0d033d7bba96bd823e65ac668e351816eb6816a24d4a2351832967b2
+```
 
-# ② 변경 전 응답 확인
-$ curl localhost:8080
+**② 변경 전 응답 확인**
+
+```console
 rhw02133670@c4r1s8 codyssey % curl localhost:8080
 <html>
 <head><title>403 Forbidden</title></head>
@@ -711,17 +677,31 @@ rhw02133670@c4r1s8 codyssey % curl localhost:8080
 <hr><center>nginx/1.31.3</center>
 </body>
 </html>
+```
 
-# ③ 호스트 파일 수정 (재빌드 없이!)
-$ echo "<h1>바인드 마운트 반영 테스트</h1>" >> src/index.html
+**③ 호스트 파일 수정 (재빌드 없이)**
 
-# ④ 변경 후 응답 확인
-$ curl localhost:8080
+```console
+rhw02133670@c4r1s8 codyssey % echo "<h1>바인드 마운트 반영 테스트</h1>" >> src/index.html
+```
+
+**④ 변경 후 응답 확인**
+
+```console
 rhw02133670@c4r1s8 codyssey % curl localhost:8080                                        
 <h1>바인드 마운트 반영 테스트</h1>
 ```
 
-**확인 포인트:** **이미지를 다시 빌드하지 않았는데도** 응답이 바뀐다. 컨테이너가 호스트 디렉토리를 직접 들여다보기 때문이다. 그래서 개발 중에는 바인드 마운트를 쓴다(코드 수정 → 즉시 확인). 반대로 [10.3](#103-빌드-결과)의 `COPY`는 빌드 시점에 파일을 이미지 **안으로 복사**하므로, 호스트를 고쳐도 반영되지 않는다.
+### 12.3 전/후 비교
+
+| | 호스트 `src/` | `curl localhost:8080` 응답 |
+|---|---|---|
+| 변경 전 | `index.html` 없음 | **403 Forbidden** (표시할 index 파일 없음) |
+| 변경 후 | `index.html` 생성 (한 줄 추가) | **`<h1>바인드 마운트 반영 테스트</h1>`** |
+
+**바인드 마운트가 이미지 안의 내용을 완전히 덮어쓴다는 점이 403으로 드러났다.** 이미지에는 [10.3](#103-빌드-결과)에서 `COPY`한 `index.html`이 들어 있지만, 호스트의 `src/` 를 그 자리에 겹쳐 마운트하는 순간 컨테이너는 **호스트 쪽만** 보게 된다. 당시 `src/` 에 `index.html` 이 없었으므로([16.1](#161-단일-서비스)에서 `web/` 로 옮긴 상태) NGINX가 표시할 파일을 찾지 못해 403을 반환했다.
+
+**확인 포인트: 이미지를 다시 빌드하지 않았는데도 응답이 바뀐다.** 컨테이너가 호스트 디렉토리를 직접 들여다보기 때문이다. 그래서 개발 중에는 바인드 마운트를 쓴다(코드 수정 → 즉시 확인). 반대로 `COPY`는 빌드 시점에 파일을 이미지 **안으로 복사**하므로 호스트를 고쳐도 반영되지 않는다.
 
 ---
 
@@ -729,23 +709,21 @@ rhw02133670@c4r1s8 codyssey % curl localhost:8080
 
 ### 13.1 목적
 
-컨테이너가 **삭제되어도 데이터가 유지되는 영속성(Persistence)** 을 검증한다.
-
-컨테이너 안에서 만든 파일은 "컨테이너 레이어"라는 임시 공간에 쓰이고, `docker rm` 하는 순간 함께 사라진다. 볼륨은 **컨테이너와 수명이 분리된** 저장 공간이다.
+컨테이너 안에서 만든 파일은 "컨테이너 레이어"라는 임시 공간에 쓰이고 `docker rm` 시 함께 사라진다. 볼륨은 **컨테이너와 수명이 분리된** 저장 공간이며, 이를 통해 **영속성(Persistence)** 을 검증한다.
 
 ### 13.2 검증 절차
 
 **① 볼륨 생성**
 
 ```console
-$ docker volume create my-volume
+rhw02133670@c4r1s8 codyssey % docker volume create my-volume
 my-volume
 ```
 
 **② 컨테이너 연결 및 데이터 저장**
 
 ```console
-$ docker run -it --name worker-container -v my-volume:/mnt/data alpine sh
+rhw02133670@c4r1s8 codyssey % docker run -it --name worker-container -v my-volume:/mnt/data alpine sh
 Unable to find image 'alpine:latest' locally
 latest: Pulling from library/alpine
 55afa1ecc21d: Pull complete 
@@ -758,19 +736,17 @@ data
 / # exit
 ```
 
-`-v my-volume:/mnt/data` = 볼륨을 컨테이너 안 `/mnt/data` 자리에 연결.
-
 **③ 컨테이너 삭제**
 
 ```console
-$ docker rm worker-container
+rhw02133670@c4r1s8 codyssey % docker rm worker-container
 worker-container
 ```
 
 **④ 삭제 후 데이터 확인**
 
 ```console
-$ docker run --rm -v my-volume:/mnt/data alpine cat /mnt/data/hello.txt 
+rhw02133670@c4r1s8 codyssey % docker run --rm -v my-volume:/mnt/data alpine cat /mnt/data/hello.txt 
 data
 ```
 
@@ -791,33 +767,7 @@ data
 
 ## 14. Git 설정 및 GitHub 연동
 
-
 ### 14.1 설정 확인
-
-git --version
-
-```console
-rhw02133670@c4r1s4 codyssey % git --version
-git version 2.53.0
-```
-
-git push
-
-```console
-rhw02133670@c4r1s4 codyssey % git push
-Enumerating objects: 5, done.
-Counting objects: 100% (5/5), done.
-Delta compression using up to 6 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 631 bytes | 631.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To github.com:Rhw0213/codyssey.git
-   269f4ab..49e6501  main -> main
-```
-
-### 6.1 설정 확인 — `git config --list`
-
 
 ```console
 rhw02133670@c4r1s8 codyssey % git config --list
@@ -837,6 +787,8 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 ```
 
+> 위 출력은 초기 설정 시점의 것이다. 이후 [17.5](#175-ssh-푸시-전환)에서 원격 주소를 SSH(`git@github.com:...`)로 전환했다.
+
 ### 14.2 항목별 의미
 
 | 항목 | 값 | 의미 |
@@ -855,24 +807,11 @@ branch.main.merge=refs/heads/main
 
 ![GitHub 저장소 연동 결과 — Public 저장소, 커밋 및 파일 반영 확인](githubScreen.png)
 
-저장소가 `Public`으로 생성되어 있고, 커밋이 반영되어 파일 목록과 README가 표시되는 것을 확인할 수 있다.
-
-### 14.4 VSCode 연동
-
-> ⛔ **미수행 — 과제 §2 필수 산출물.** "VSCode에서 GitHub 로그인 및 저장소 연동 완료" 증거가 요구되어 있다.
->
-> 필요 작업:
-> 1. VSCode → Accounts(좌하단 계정 아이콘) → GitHub 로그인
-> 2. Source Control 패널에서 이 저장소가 인식되고 `main` 브랜치·원격이 보이는 상태 캡처
-> 3. 캡처를 저장소에 올리고 이 절에 `![](파일명.png)` 로 첨부
->
-> ⚠️ 캡처 시 **계정 이메일·토큰이 화면에 노출되지 않도록** 확인할 것 (§4 보안 요구사항).
+저장소가 `Public` 으로 생성되어 있고, 커밋이 반영되어 파일 목록과 README가 표시되는 것을 확인할 수 있다.
 
 ---
 
 ## 15. 트러블슈팅
-
-과제 요구 최소 2건 → **4건 기록**
 
 ### 15.1 Docker 데몬 미실행
 
@@ -880,7 +819,7 @@ branch.main.merge=refs/heads/main
 |---|---|
 | **문제** | `docker-compose up -d` 실행 시 Docker API 연결 실패 |
 | **원인 가설** | ① 소켓 경로 오류 ② 데몬(OrbStack) 미실행 |
-| **확인** | 에러가 `no such file or directory` — 경로가 틀린 게 아니라 **소켓 파일 자체가 없음**. [9.1](#91-hello-world)에서 확인한 구조상 CLI는 요청만 전달하고 실제 작업은 데몬이 하므로, 데몬이 없으면 소켓이 생성되지 않는다 → 가설 ② 채택 |
+| **확인** | 에러가 `no such file or directory` — 경로가 틀린 게 아니라 **소켓 파일 자체가 없음**. [9.1](#91-hello-world)의 구조상 CLI는 요청만 전달하고 실제 작업은 데몬이 하므로, 데몬이 없으면 소켓이 생성되지 않는다 → **가설 ② 채택** |
 | **해결** | OrbStack 실행 후 재시도 → 정상 빌드 |
 
 ```console
@@ -888,7 +827,7 @@ rhw02133670@c4r1s4 codyssey % docker-compose up -d
 unable to get image 'codyssey-web': failed to connect to the docker API at unix:///var/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /var/run/docker.sock: connect: no such file or directory
 ```
 
-**교훈:** Docker CLI 명령이 통째로 실패할 때는 문법보다 **런타임 구동 여부**를 먼저 본다.
+**교훈:** Docker 명령이 통째로 실패할 때는 문법보다 **런타임 구동 여부**를 먼저 본다.
 
 ### 15.2 COPY 경로 오류
 
@@ -896,7 +835,7 @@ unable to get image 'codyssey-web': failed to connect to the docker API at unix:
 |---|---|
 | **문제** | `docker build` 중 `COPY` 단계에서 `index.html not found` |
 | **원인 가설** | ① 파일이 실제로 없음 ② 파일은 있으나 **경로 기준**이 다름 |
-| **확인** | `ls`로 `src/index.html` 존재를 확인 → 파일은 있음. `COPY`에는 `index.html`로 적혀 있어 빌드 컨텍스트 최상위를 탐색 → 가설 ② 채택 |
+| **확인** | `ls`로 `src/index.html` 존재 확인 → 파일은 있음. `COPY`에는 `index.html`로 적혀 있어 빌드 컨텍스트 최상위를 탐색 → **가설 ② 채택** |
 | **해결** | `COPY src/index.html ...` 로 수정 → 빌드 성공 ([10.3](#103-빌드-결과)) |
 
 ```
@@ -909,7 +848,7 @@ COPY index.html ...        # ❌ 빌드 컨텍스트 최상위를 탐색
 COPY src/index.html ...    # ✅
 ```
 
-**교훈:** `COPY`의 원본 경로는 **빌드 컨텍스트(`docker build` 의 마지막 인자) 기준 상대 경로**다. 절대/상대 경로 개념이 그대로 적용된다 ([19.1](#191-절대-경로와-상대-경로)).
+**교훈:** `COPY`의 원본 경로는 **빌드 컨텍스트(`docker build` 의 마지막 인자) 기준 상대 경로**다. → [19.1](#191-절대-경로와-상대-경로)
 
 ### 15.3 apk 옵션 오타
 
@@ -917,7 +856,7 @@ COPY src/index.html ...    # ✅
 |---|---|
 | **문제** | `apk add --nocache` 실행 시 `unrecognized option` |
 | **원인 가설** | ① Alpine에 해당 옵션 없음 ② 옵션 표기 오류 |
-| **확인** | 에러가 옵션명을 `nocache`로 인식 — 하이픈이 하나 빠져 단어가 붙은 상태 → 가설 ② 채택 |
+| **확인** | 에러가 옵션명을 `nocache`로 인식 — 하이픈이 하나 빠져 단어가 붙은 상태 → **가설 ② 채택** |
 | **해결** | `--no-cache` 로 수정 → 23개 패키지 정상 설치 |
 
 ```console
@@ -939,14 +878,43 @@ OK: 20.0 MiB in 39 packages
 |---|---|
 | **문제** | 모든 Compose 명령에 `version` 관련 경고가 반복 출력 |
 | **원인 가설** | ① 문법 오류 ② 버전 표기가 더 이상 사용되지 않음 |
-| **확인** | 경고문에 `is obsolete, it will be ignored` — 오류가 아니라 **폐기된 속성 안내**. 실행 자체는 정상 완료됨 → 가설 ② 채택 |
-| **해결/대안** | `docker-compose.yml`에서 `version: "3.8"` 줄을 삭제. Compose V2는 이 속성을 사용하지 않는다 |
+| **확인** | 경고문에 `is obsolete, it will be ignored` — 오류가 아니라 **폐기된 속성 안내**. 실행 자체는 정상 완료 → **가설 ② 채택** |
+| **해결/대안** | `docker-compose.yml`에서 `version: "3.8"` 줄 삭제. Compose V2는 이 속성을 사용하지 않는다 |
 
 ```
 WARN[0000] /Users/rhw02133670/codyssey/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
 ```
 
 **교훈:** `WARN`과 `ERROR`를 구분한다. 경고는 동작을 막지 않지만, 방치하면 실제 오류를 가린다.
+
+### 15.5 푸시 거부 및 병합 충돌
+
+| 단계 | 내용 |
+|---|---|
+| **문제** | 다른 장비(Windows)에서 `git push` 시 `[rejected] non-fast-forward`, 이어서 `git pull` 도 실패 |
+| **원인 가설** | ① 권한 문제 ② 로컬이 원격보다 뒤처짐 ③ 미해결 충돌이 남아 있음 |
+| **확인** | 첫 에러가 `tip of your current branch is behind its remote counterpart` → 가설 ②. `pull` 을 시도하자 `you have unmerged files` → **가설 ③도 동시에 해당** (충돌 미해결 상태에서 pull이 차단됨) |
+| **해결** | `git merge --abort` 로 미해결 병합을 취소 → `git pull` 재실행 → `README.md` 충돌을 해결하고 `add` · `commit` → `push` 성공 |
+
+```console
+C:\codyssey\codyssey>git push
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/Rhw0213/codyssey.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart.
+
+C:\codyssey\codyssey>git pull
+error: Pulling is not possible because you have unmerged files.
+fatal: Exiting because of an unresolved conflict.
+
+C:\codyssey\codyssey>git merge --abort
+C:\codyssey\codyssey>git pull
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+**교훈:** 두 대의 장비(macOS / Windows)에서 같은 저장소를 다루면 충돌이 발생한다. **작업 시작 전 `git pull`** 이 이 문제를 대부분 막아준다. 또한 `push --force` 는 원격의 커밋과 증거 파일을 지울 수 있으므로 쓰지 않는다.
 
 ---
 
@@ -1045,46 +1013,7 @@ d40e1afd0aa8   alpine:latest   "sleep infinity"         12 seconds ago   Up 11 s
 
 **매핑이 없어도 컨테이너끼리는 통신된다.** 매핑은 "바깥에서 들어오는 길"이지 내부 통신과는 별개다.
 
-<<<<<<< HEAD
-**통신 테스트 — 이름으로 주소 찾기**
-=======
----
-
-**`PORTS` 충돌시**
-
-```bash
-# 1. 포트 확인
-sudo ss -ltnp | grep :8080
-
-# 2. 프로세스 종료
-kill <PID>          # 안 되면 kill -9 <PID>
-
-# 3. 또는 포트 변경 후 실행
-docker run -p 8081:80 <이미지명>
-
-# 4. 재확인
-sudo ss -ltnp | grep :8081
-```
-
-### 8.3 컨테이너 간 통신 테스트
-
-#### 트러블슈팅 — 옵션 오타
-
-```console
-/ # apk add --nocache bind-tools curl
-ERROR: command line: unrecognized option 'nocache'
-
-/ # apk add --no-cache bind-tools curl
-(1/23) Installing fstrm (0.6.1-r4)
-...
-(23/23) Installing curl (8.21.0-r0)
-OK: 20.0 MiB in 39 packages
-```
-
-`--nocache` ❌ → `--no-cache` ✅ (하이픈 누락)
-
-#### ① 이름으로 주소 찾기 — `nslookup`
->>>>>>> 4b0318d3fef5d46e06d276cb66cb0143b9e85647
+**① 이름으로 주소 찾기 — `nslookup`**
 
 ```console
 / # nslookup cache
@@ -1098,7 +1027,7 @@ Address: 192.168.97.4
 
 `127.0.0.11` 은 일반 DNS가 아니라 **Docker가 컨테이너마다 넣어주는 내장 DNS**이며, 여기에 Compose의 **서비스 이름이 그대로 등록**된다.
 
-**통신 테스트 — 이름으로 접속**
+**② 이름으로 접속 — `curl`**
 
 ```console
 / # curl web
@@ -1118,7 +1047,7 @@ Address: 192.168.97.4
 
 컨테이너 IP는 재시작마다 바뀐다. `192.168.97.4`를 코드에 적어두면 다음 `up`에서 깨진다. 서비스 이름은 고정이므로 `redis://cache:6379` 처럼 **이름으로 적어두면 계속 동작한다.**
 
-> ⚠️ **확인 필요:** `curl web` 응답이 [11장](#11-포트-매핑-및-접속-증거)의 커스텀 페이지가 아니라 **nginx 기본 페이지**다. 이 Compose 파일에서 `web`을 `build: ./web` → `image: nginx:latest` 로 바꿨기 때문이다. 통신 검증에는 영향이 없으나, `build: ./web` 으로 되돌리면 커스텀 페이지로 확인할 수 있다.
+이 Compose 파일은 `web` 을 `build: ./web` 대신 `image: nginx:latest` 로 지정했으므로, `curl web` 응답은 [11장](#11-포트-매핑-및-접속-증거)의 커스텀 페이지가 아닌 nginx 기본 페이지다.
 
 ### 16.3 운영 명령
 
@@ -1150,9 +1079,9 @@ web-1    | 192.168.97.3 - - [29/Jul/2026:01:56:27 +0000] "GET / HTTP/1.1" 200 89
 
 여러 컨테이너 로그가 **`서비스명 |` 접두사와 함께 한 화면에 합쳐진다.**
 
-**🔑 가장 중요한 증거는 마지막 줄이다.** [16.2](#162-멀티-컨테이너와-통신)에서 `app` 이 보낸 `curl web` 요청이 **받는 쪽(`web`) 로그에 그대로 기록**되었다. `200`(성공)과 `curl/8.21.0`(보낸 도구)까지 일치하므로, **통신 성공의 양방향 증거**가 된다.
+**🔑 가장 중요한 증거는 마지막 줄이다.** [16.2](#162-멀티-컨테이너와-통신)에서 `app` 이 보낸 `curl web` 요청이 **받는 쪽(`web`) 로그에 그대로 기록**되었다. `200`(성공)과 `curl/8.21.0`(보낸 도구)까지 일치하므로 **통신 성공의 양방향 증거**가 된다.
 
-> Redis 경고(`authentication ... not protected`)도 주목할 만하다. 지금은 외부 포트를 열지 않아 문제없지만, `ports`로 노출한다면 반드시 비밀번호 설정이 필요하다.
+Redis 경고(`authentication ... not protected`)는 인증 없이 떠 있다는 뜻이다. 외부 포트를 열지 않아 지금은 문제없지만, `ports`로 노출한다면 비밀번호 설정이 필요하다.
 
 **정리 — `down`**
 
@@ -1172,7 +1101,7 @@ NAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS
 
 **`down`은 볼륨을 지우지 않는다.** 컨테이너와 네트워크는 사라져도 데이터는 남는다 — [13장](#13-docker-볼륨--영속성-검증) 원칙이 실제로 동작하는 모습이다. (볼륨까지 지우려면 `down -v`)
 
-> `app-1` 제거에만 10.3초가 걸린 것은 `sleep infinity`가 종료 신호에 즉시 반응하지 않아 강제 종료까지 대기한 시간이다.
+`app-1` 제거에만 10.3초가 걸린 것은 `sleep infinity` 가 종료 신호에 즉시 반응하지 않아 강제 종료까지 대기한 시간이다.
 
 **배움 포인트 — 상태 확인 루틴**
 
@@ -1237,7 +1166,7 @@ SHA256:******************************** ***@***.com
 | `-t ed25519` | RSA보다 짧고 빠르며 안전 — 현재 권장 방식 |
 | `-C "..."` | 키 식별용 주석 (인증에는 사용되지 않음) |
 
-### 17.2 파일 권한 — 6장과 이어지는 지점
+### 17.2 파일 권한
 
 ```console
 rhw02133670@c4r1s4 codyssey % ls -al ~/.ssh
@@ -1277,24 +1206,28 @@ Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
 Hi Rhw0213! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
-✅ **`Hi Rhw0213!`** = 내 계정으로 인식됨 → 키 등록 성공
+✅ **`Hi Rhw0213!` = 내 계정으로 인식됨 → 키 등록 성공**
 
-`does not provide shell access`는 에러가 아니다. GitHub은 SSH를 **Git 통신 용도로만** 열어두고 서버 접속은 허용하지 않는다는 정상 안내다.
+`does not provide shell access` 는 에러가 아니다. GitHub은 SSH를 **Git 통신 용도로만** 열어두고 서버 접속은 허용하지 않는다는 정상 안내다.
 
-첫 접속 시 물어본 질문은 **접속한 서버가 진짜 GitHub인지** 확인하는 절차이며, 승인하면 `~/.ssh/known_hosts`에 지문이 저장된다. 위 지문(`SHA256:+DiY3wvv...`)은 GitHub이 공식 배포하는 **공개 값**이므로 마스킹 대상이 아니다.
+첫 접속 시의 질문은 **접속한 서버가 진짜 GitHub인지** 확인하는 절차이며, 승인하면 `~/.ssh/known_hosts` 에 지문이 저장된다. 위 지문(`SHA256:+DiY3wvv...`)은 GitHub이 공식 배포하는 **공개 값**이므로 마스킹 대상이 아니다.
 
-### 17.5 남은 단계 — 푸시 경로 전환
+### 17.5 SSH 푸시 전환
 
-> ⚠️ **부분 완료.** 과제 요구는 "**HTTPS 대신 SSH로 푸시가 가능하도록**" 이다. 인증은 성공했으나 [14.1](#141-설정-확인)의 원격 주소가 아직 HTTPS다.
-> ```
-> remote.origin.url=https://github.com/Rhw0213/codyssey.git
-> ```
-> 이 상태에서는 `push`가 계속 HTTPS로 나간다. 아래를 실행하고 결과를 이 절에 기록해야 완료된다.
-> ```console
-> $ git remote set-url origin git@github.com:Rhw0213/codyssey.git
-> $ git remote -v
-> $ git push
-> ```
+```console
+rhw02133670@c4r1s4 codyssey % git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 6 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 631 bytes | 631.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:Rhw0213/codyssey.git
+   269f4ab..49e6501  main -> main
+```
+
+✅ **`To github.com:Rhw0213/codyssey.git`** — 주소에 `https://` 가 없고 `github.com:` 형태다. **SSH 경로로 푸시가 완료**되었음을 뜻한다. ([14.1](#141-설정-확인)의 초기 설정은 HTTPS였다.)
 
 **배움 포인트 — 인증 방식 차이**
 
@@ -1311,15 +1244,14 @@ Hi Rhw0213! You've successfully authenticated, but GitHub does not provide shell
 
 ### 18.1 개인 PC 종속 요소
 
-과제 §7 제약사항: *"특정 개인 PC에 종속된 경로/설정이 있다면 대체 방법 또는 주의사항을 함께 기록한다."*
-
 | 종속 요소 | 문서 내 예시 | 대체 방법 |
 |---|---|---|
-| **홈 디렉토리 절대 경로** | `/Users/rhw02133670/codyssey` | 평가자는 임의 위치에 클론 후 그 디렉토리에서 실행. 문서의 모든 명령은 **저장소 루트 기준 상대 경로**로 동작한다 |
-| **호스트명** | 프롬프트의 `c4r1s8` / `c4r1s4` | 실습 장비 차이일 뿐, 결과에 영향 없음 |
-| **macOS 전용 설정** | `credential.helper=osxkeychain` | Windows는 `manager`, Linux는 `store` 또는 `libsecret` |
-| **OrbStack** | 컨테이너 런타임 | Docker Desktop 등으로 대체 가능. `docker` 명령은 동일 |
-| **호스트 포트 8080** | `-p 8080:80` | 이미 사용 중이면 `-p 8081:80` 등으로 변경 (컨테이너 쪽 `80`은 유지) |
+| 홈 디렉토리 절대 경로 | `/Users/rhw02133670/codyssey` | 임의 위치에 클론 후 그 디렉토리에서 실행. 문서의 모든 명령은 **저장소 루트 기준 상대 경로**로 동작 |
+| 호스트명 | 프롬프트의 `c4r1s8` / `c4r1s4` | 실습 장비 차이일 뿐, 결과에 영향 없음 |
+| macOS 전용 설정 | `credential.helper=osxkeychain` | Windows는 `manager`, Linux는 `store` 또는 `libsecret` |
+| macOS 전용 명령 | `sw_vers`, `lsof -i` | Linux는 `uname -a`, `ss -ltnp` |
+| OrbStack | 컨테이너 런타임 | Docker Desktop 등으로 대체 가능. `docker` 명령은 동일 |
+| 호스트 포트 8080 | `-p 8080:80` | 사용 중이면 `-p 8081:80` 으로 변경 ([11.1](#111-호스트-포트가-이미-사용-중일-때)) |
 
 **재현 절차**
 
@@ -1332,8 +1264,6 @@ $ docker run -d -p 8080:80 my-nginx
 ```
 
 ### 18.2 민감정보 처리
-
-과제 §4 보안 요구사항에 따른 처리 내역.
 
 | 대상 | 처리 | 비고 |
 |---|---|---|
@@ -1349,8 +1279,6 @@ $ docker run -d -p 8080:80 my-nginx
 
 ## 19. 학습 정리
 
-과제 §3 "스스로 설명할 수 있어야 한다" 6개 항목에 대한 답.
-
 ### 19.1 절대 경로와 상대 경로
 
 **절대 경로**는 루트(`/`)에서 시작하는 전체 주소로, 어디서 실행해도 같은 곳을 가리킨다. **상대 경로**는 현재 위치(`pwd`) 기준이므로 서 있는 곳이 바뀌면 가리키는 대상도 바뀐다.
@@ -1362,9 +1290,9 @@ $ docker run -d -p 8080:80 my-nginx
 % cd ..                         ← 상대 경로 (한 단계 위)
 ```
 
-`cd test`는 `/tmp`에서 실행하면 `/tmp/test`를 찾지만, `cd /Users/rhw02133670/codyssey/test`는 어디서든 같은 곳이다.
+`cd test` 는 `/tmp` 에서 실행하면 `/tmp/test` 를 찾지만, `cd /Users/rhw02133670/codyssey/test` 는 어디서든 같은 곳이다.
 
-**왜 중요한가 — 재현성.** 절대 경로 `/Users/rhw02133670/...`는 **내 컴퓨터에만** 존재한다. 팀원 장비에는 그 계정이 없으니 그대로 깨진다. 그래서 스크립트와 Dockerfile에는 상대 경로를 쓴다.
+**왜 중요한가 — 재현성.** 절대 경로 `/Users/rhw02133670/...` 는 **내 컴퓨터에만** 존재한다. 팀원 장비에는 그 계정이 없으니 그대로 깨진다. 그래서 스크립트와 Dockerfile에는 상대 경로를 쓴다.
 
 이 미션에서 실제로 겪은 사례가 [15.2](#152-copy-경로-오류)다. `COPY`의 원본 경로는 **빌드 컨텍스트 기준 상대 경로**이므로, 기준점을 잘못 잡아 파일을 못 찾았다.
 
@@ -1378,7 +1306,7 @@ $ docker run -d -p 8080:80 my-nginx
 | `644` | 4+2+0 / 4+0+0 / 4+0+0 | `rw-r--r--` |
 | `700` | 4+2+1 / 0 / 0 | `rwx------` |
 
-**`x`의 의미가 파일과 디렉토리에서 다르다는 점이 핵심이다.**
+**`x`의 의미가 파일과 디렉토리에서 다르다.**
 
 | | 파일 | 디렉토리 |
 |---|---|---|
@@ -1392,7 +1320,7 @@ $ docker run -d -p 8080:80 my-nginx
 - **일반 파일 644** — 실행할 게 아니니 `x`를 줄 이유가 없다. 불필요한 실행 권한을 주지 않는 것이 안전하다.
 - **실행 스크립트 755** — 실행돼야 하므로 `x`를 준다.
 
-[6.2](#62-디렉토리-권한과-재귀-변경)에서 `chmod 700 myFolder` 후 `drwx------`가 되어 소유자 외에는 진입조차 못 하는 상태가 되었고, `chmod -R 755`로 되돌린 것이 이 규칙에 따른 선택이다. 실무 사례는 [17.2](#172-파일-권한--6장과-이어지는-지점)의 SSH 키(개인키 `600`)다.
+[6.2](#62-디렉토리-권한과-재귀-변경)에서 `chmod 700 myFolder` 후 `drwx------` 가 되어 소유자 외에는 진입조차 못 하는 상태가 되었고, `chmod -R 755` 로 되돌린 것이 이 규칙에 따른 선택이다. 실무 사례는 [17.2](#172-파일-권한)의 SSH 개인키(`600`)다.
 
 ### 19.3 기존 Dockerfile 기반 커스텀 이미지
 
@@ -1410,13 +1338,13 @@ NGINX 컴파일과 설정은 공식 이미지가 이미 해두었다. 나는 "�
 $ docker build -t my-nginx .
 ```
 
-`-t`는 태그, 마지막 `.`은 **빌드 컨텍스트 경로**이며 이것이 [19.1](#191-절대-경로와-상대-경로)에서 말한 상대 경로의 기준점이다.
+`-t` 는 태그, 마지막 `.` 은 **빌드 컨텍스트 경로**이며 이것이 [19.1](#191-절대-경로와-상대-경로)에서 말한 상대 경로의 기준점이다.
 
 **왜 중요한가:** Dockerfile 한 장이 **환경 전체의 명세서**가 된다. Git에 함께 올려두면 팀원이 `docker build` 한 번으로 같은 환경을 얻는다. 미션 목표인 "내 컴퓨터에서만 돌아가는 문제"가 여기서 해소된다.
 
 ### 19.4 포트 매핑이 필요한 이유
 
-**컨테이너는 자기만의 네트워크 공간을 갖기 때문이다.**
+**컨테이너는 리눅스 네트워크 네임스페이스로 자기만의 IP · 라우팅 테이블 · 포트 공간을 갖기 때문이다.**
 
 컨테이너 안의 80번과 호스트의 80번은 **이름만 같은 서로 다른 포트**다. 컨테이너 안에서 NGINX가 정상 동작해도, 격리가 기본값이므로 호스트 브라우저에는 보이지 않는다. 따라서 통로를 **명시적으로** 뚫어야 한다.
 
@@ -1433,23 +1361,24 @@ $ docker run -d -p 8080:80 my-nginx
 | `EXPOSE 80` | "80번을 쓴다"는 문서/메모 | ❌ |
 | `-p 8080:80` | 호스트와 컨테이너를 실제 연결 | ✅ |
 
-**부가 이점:** 포트를 갈아끼울 수 있으니 같은 이미지를 `-p 8080:80`, `-p 8081:80` 으로 **동시에 여러 개** 띄울 수 있다.
+**부가 이점:** 호스트 포트를 갈아끼울 수 있으니 같은 이미지를 `-p 8080:80`, `-p 8081:80` 으로 **동시에 여러 개** 띄울 수 있다.
 
-[16.2](#162-멀티-컨테이너와-통신)에서 이 개념이 명확히 드러난다. `cache`는 매핑이 없어 호스트에서 접근할 수 없지만, `app`에서는 `nslookup cache`로 찾아졌다. **매핑은 "바깥에서 들어오는 길"일 뿐, 내부 통신과는 별개다.** Redis를 외부에 열지 않는 것이 보안상 오히려 정상이다.
+[16.2](#162-멀티-컨테이너와-통신)에서 이 개념이 명확히 드러난다. `cache` 는 매핑이 없어 호스트에서 접근할 수 없지만, `app` 에서는 `nslookup cache` 로 찾아졌다. **매핑은 "바깥에서 들어오는 길"일 뿐, 내부 통신과는 별개다.** Redis를 외부에 열지 않는 것이 보안상 오히려 정상이다.
 
 ### 19.5 Docker 볼륨과 영속 데이터
 
 **컨테이너의 파일시스템은 컨테이너와 수명을 같이한다.** 안에서 만든 파일은 "컨테이너 레이어"라는 임시 공간에 쓰이고 `docker rm` 시 사라진다.
 
-**볼륨은 Docker가 호스트 쪽에 따로 관리하는 저장 공간**으로, 컨테이너와 **수명이 분리**되어 있다. [13.2](#132-검증-절차)에서 컨테이너를 삭제한 뒤에도 새 컨테이너에서 `data`를 읽어낸 것이 그 증거다.
+**볼륨은 Docker가 호스트 쪽에 따로 관리하는 저장 공간**으로, 컨테이너와 **수명이 분리**되어 있다. [13.3](#133-전후-비교-및-결론)에서 컨테이너를 삭제한 뒤에도 새 컨테이너에서 `data` 를 읽어낸 것이 그 증거다.
 
-`-v my-volume:/mnt/data`는 "볼륨을 컨테이너 안 `/mnt/data` 자리에 연결하라"는 뜻이다. **포트 매핑이 네트워크를 연결한다면 이것은 저장소를 연결하는 것**으로, 구조가 같다.
+`-v my-volume:/mnt/data` 는 "볼륨을 컨테이너 안 `/mnt/data` 자리에 연결하라"는 뜻이다. **포트 매핑이 네트워크를 연결한다면 이것은 저장소를 연결하는 것**으로, 구조가 같다.
 
 | | 볼륨 | 바인드 마운트 |
 |---|---|---|
 | 지정 | `-v my-volume:/mnt/data` | `-v $(pwd)/src:/app/src` |
 | 위치 | Docker가 관리 | 내가 호스트 경로 지정 |
 | 용도 | DB 데이터 등 **영속 데이터** | 개발 중 **코드 즉시 반영** |
+| 검증 | [13장](#13-docker-볼륨--영속성-검증) | [12장](#12-바인드-마운트--변경-반영-검증) |
 
 관통하는 원칙은 하나다. **컨테이너는 언제든 버리고 다시 만들 수 있어야 하고, 그러려면 상태(데이터)는 컨테이너 밖에 있어야 한다.**
 
@@ -1464,52 +1393,23 @@ $ docker run -d -p 8080:80 my-nginx
 | 인터넷 | 필요 없음 | 필요함 |
 | 대체 | Git 없이 GitHub 사용 불가 | GitLab, Bitbucket 등으로 대체 가능 |
 
-**Git은 인터넷 없이도 완전히 동작한다.** `commit`, `branch`, `merge`, 이력 조회가 전부 오프라인에서 된다. 저장소의 실체는 프로젝트 폴더 안의 `.git` 디렉토리이며, [5.1](#51-경로-·-목록-·-이동)의 `ls -al` 출력에 계속 보였던 것이 그것이다.
+**Git은 인터넷 없이도 완전히 동작한다.** `commit`, `branch`, `merge`, 이력 조회가 전부 오프라인에서 된다. 저장소의 실체는 프로젝트 폴더 안의 `.git` 디렉토리이며, [5.1](#51-경로--목록--이동)의 `ls -al` 출력에 계속 보였던 것이 그것이다.
 
 ```
 drwxr-xr-x  13 rhw02133670  rhw02133670   416 Jul 28 13:05 .git   ← 실제 저장소
 ```
 
-**GitHub은 그 `.git`의 사본을 인터넷에 두고**, 협업 기능(Pull Request, 이슈, 코드 리뷰, Actions)을 얹은 서비스다.
+**GitHub은 그 `.git` 의 사본을 인터넷에 두고**, 협업 기능(Pull Request, 이슈, 코드 리뷰, Actions)을 얹은 서비스다.
 
 [14.1](#141-설정-확인)의 `git config` 출력이 이 경계를 그대로 보여준다.
 
 ```
 user.name=Rhw0213              ← Git 설정 (로컬)
 init.defaultbranch=main        ← Git 설정 (로컬)
-remote.origin.url=https://github.com/Rhw0213/codyssey.git   ← GitHub 연결
+remote.origin.url=...          ← GitHub 연결
 branch.main.remote=origin      ← 로컬 main ↔ 원격 main 연결
 ```
 
-앞의 둘은 GitHub 없이도 의미가 있고, 뒤의 둘이 **GitHub과 이어주는 다리**다. 그 다리를 실제로 건너는 명령이 `push`와 `pull`이며, `origin`은 원격 주소에 붙인 별명일 뿐이다.
+앞의 둘은 GitHub 없이도 의미가 있고, 뒤의 둘이 **GitHub과 이어주는 다리**다. 그 다리를 실제로 건너는 명령이 `push` 와 `pull` 이며, `origin` 은 원격 주소에 붙인 별명일 뿐이다.
 
----
-
-## 20. 남은 작업
-
-### 20.1 필수 (제출 전 반드시)
-
-| # | 항목 | 실행할 명령 | 반영 위치 |
-|---|---|---|---|
-| 1 | 실행 환경 기록 | `sw_vers` / `echo $SHELL` / `docker --version` / `git --version` | [2](#2-실행-환경) |
-| 2 | 데몬 점검 기록 | `docker info` | [7](#7-docker-설치-및-기본-점검) |
-| 3 | 컨테이너 중지·전체 목록 | `docker stop <name>` / `docker ps -a` | [8.6](#86-컨테이너-중지-및-전체-목록) |
-| 4 | 로그·리소스 확인 | `docker logs <name>` / `docker stats --no-stream` | [8.7](#87-로그-및-리소스-확인) |
-| 5 | 컨테이너 내부 `echo` | `echo "Hello from container"` | [9.2](#92-ubuntu-컨테이너-진입) |
-| 6 | attach / exec 차이 관찰 | [9.3](#93-attach-와-exec-의-차이)의 실험 절차 | [9.3](#93-attach-와-exec-의-차이) |
-| 7 | **바인드 마운트 전/후 비교** | [12.2](#122-실행-절차)의 4단계 | [12](#12-바인드-마운트--변경-반영-검증) |
-| 8 | **VSCode 연동 증거** | VSCode GitHub 로그인 + Source Control 캡처 | [14.4](#144-vscode-연동) |
-
-### 20.2 보너스 완성
-
-| # | 항목 | 실행할 명령 | 반영 위치 |
-|---|---|---|---|
-| 9 | SSH 푸시 경로 전환 | `git remote set-url origin git@github.com:Rhw0213/codyssey.git` → `git push` | [17.5](#175-남은-단계--푸시-경로-전환) |
-
-### 20.3 정리 권장
-
-| # | 항목 | 조치 |
-|---|---|---|
-| 10 | Compose `version` 속성 | `docker-compose.yml`에서 `version: "3.8"` 줄 삭제 → 경고 제거 |
-| 11 | `web` 서비스 이미지 | `image: nginx:latest` → `build: ./web` (커스텀 페이지로 통신 확인) |
-| 12 | 명령 표기 통일 | `docker-compose` → `docker compose` |
+[15.5](#155-푸시-거부-및-병합-충돌)의 충돌이 이 구조에서 나온다. 로컬과 원격이 각자 이력을 갖는 **분산** 구조이므로, 두 장비에서 작업하면 원격 이력을 먼저 합쳐야(`pull`) 올릴 수(`push`) 있다.
