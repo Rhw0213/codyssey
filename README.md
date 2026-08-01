@@ -609,7 +609,7 @@ my-nginx     latest    f8532955e1df   ...             ...
 rhw02133670@c4r1s8 codyssey % docker run -d -p 8080:80 my-nginx
 ```
 
-![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](portMapping.png)
+![포트 매핑 접속 증거 — 주소창(localhost:8080)과 커스텀 페이지](web/portMapping.png)
 
 주소창의 **`localhost:8080`** 과 커스텀 페이지(`🚀 Codyssey Docker 미션 성공!`)가 함께 보인다 → 포트 매핑과 커스텀 이미지 적용이 동시에 증명된다.
 
@@ -805,7 +805,7 @@ branch.main.merge=refs/heads/main
 
 ### 14.3 GitHub 연동 증거
 
-![GitHub 저장소 연동 결과 — Public 저장소, 커밋 및 파일 반영 확인](githubScreen.png)
+![GitHub 저장소 연동 결과 — Public 저장소, 커밋 및 파일 반영 확인](web/githubScreen.png)
 
 저장소가 `Public` 으로 생성되어 있고, 커밋이 반영되어 파일 목록과 README가 표시되는 것을 확인할 수 있다.
 
